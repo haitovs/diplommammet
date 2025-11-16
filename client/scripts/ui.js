@@ -84,11 +84,12 @@ export function renderAiPanel(summaryEl, listEl, payload) {
 }
 
 export function renderCatalog(container, entries = []) {
-  if (!entries.length) {
+  const top = entries.slice(0, 3);
+  if (!top.length) {
     container.innerHTML = '<li class="muted">No matches yet.</li>';
     return;
   }
-  container.innerHTML = entries
+  container.innerHTML = top
     .map(
       (entry) => `
         <li>
