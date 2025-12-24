@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GeoQuest - Test your world knowledge with fun geography games. No sign-up required!">
+  <meta name="keywords" content="geography, quiz, countries, flags, capitals, learning, game">
+  <title>GeoQuest - World Geography Challenge</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+</head>
+<body>
+  <div id="app" class="app">
+    <!-- Particle Background -->
+    <div class="particles" aria-hidden="true"></div>
+    
+    <!-- Header -->
+    <header class="header">
+      <div class="header-brand" onclick="app.navigate('home')">
+        <span class="logo">🌍</span>
+        <span class="brand-text">GeoQuest</span>
+      </div>
+      <nav class="header-nav">
+        <button class="nav-btn" onclick="app.navigate('home')" title="Home">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-btn" onclick="app.showStats()" title="Your Stats">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Stats</span>
+        </button>
+        <button class="nav-btn" onclick="app.showSettings()" title="Settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Settings</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="main-content">
+      <!-- Home Screen -->
+      <section id="home-screen" class="screen active">
+        <!-- Hero Section -->
+        <div class="hero">
+          <div class="hero-content">
+            <p class="hero-eyebrow">🎮 Geography Learning Game</p>
+            <h1 class="hero-title">
+              Test Your <span class="gradient-text">World Knowledge</span>
+            </h1>
+            <p class="hero-subtitle">
+              Explore countries, flags, capitals, and fascinating facts through engaging mini-games. 
+              No account needed — just pick a game and start playing!
+            </p>
+          </div>
+          <div class="hero-globe" aria-hidden="true">
+            <div class="globe-emoji">🌍</div>
+          </div>
+        </div>
+
+        <!-- Game Mode Cards -->
+        <div class="section-header">
+          <h2 class="section-title">Choose Your Challenge</h2>
+          <p class="section-subtitle">5 unique ways to test your geography skills</p>
+        </div>
+        
+        <div class="game-grid">
+          <!-- Flag Master -->
+          <article class="game-card" data-game="flags" onclick="app.startGame('flags')">
+            <div class="game-card-icon">🏳️</div>
+            <div class="game-card-content">
+              <h3 class="game-card-title">Flag Master</h3>
+              <p class="game-card-desc">Identify countries by their flags</p>
+              <div class="game-card-meta">
+                <span class="difficulty-badge easy">All Levels</span>
+                <span class="game-time">~5 min</span>
+              </div>
+            </div>
+            <button class="game-card-btn">Play</button>
+          </article>
+
+          <!-- Capital Cities -->
+          <article class="game-card" data-game="capitals" onclick="app.startGame('capitals')">
+            <div class="game-card-icon">🏛️</div>
+            <div class="game-card-content">
+              <h3 class="game-card-title">Capital Cities</h3>
+              <p class="game-card-desc">Match countries with their capitals</p>
+              <div class="game-card-meta">
+                <span class="difficulty-badge medium">Medium</span>
+                <span class="game-time">~5 min</span>
+              </div>
+            </div>
+            <button class="game-card-btn">Play</button>
+          </article>
+
+          <!-- Shape Shifter -->
+          <article class="game-card" data-game="shapes" onclick="app.startGame('shapes')">
+            <div class="game-card-icon">🗺️</div>
+            <div class="game-card-content">
+              <h3 class="game-card-title">Shape Shifter</h3>
+              <p class="game-card-desc">Recognize countries by their outline</p>
+              <div class="game-card-meta">
+                <span class="difficulty-badge hard">Hard</span>
+                <span class="game-time">~7 min</span>
+              </div>
+            </div>
+            <button class="game-card-btn">Play</button>
+          </article>
+
+          <!-- Fact Detective -->
+          <article class="game-card" data-game="facts" onclick="app.startGame('facts')">
+            <div class="game-card-icon">🔍</div>
+            <div class="game-card-content">
+              <h3 class="game-card-title">Fact Detective</h3>
+              <p class="game-card-desc">Guess countries from clever clues</p>
+              <div class="game-card-meta">
+                <span class="difficulty-badge medium">Medium</span>
+                <span class="game-time">~8 min</span>
+              </div>
+            </div>
+            <button class="game-card-btn">Play</button>
+          </article>
+        </div>
+
+        <!-- Speed Challenge Banner -->
+        <div class="speed-banner" onclick="app.startGame('speed')">
+          <div class="speed-banner-content">
+            <div class="speed-icon">⚡</div>
+            <div class="speed-text">
+              <h3>Speed Geography</h3>
+              <p>30-second rapid-fire challenge — test all your skills!</p>
+            </div>
+          </div>
+          <button class="speed-btn">Start Challenge</button>
+        </div>
+
+        <!-- Stats Preview -->
+        <div class="stats-preview">
+          <h3 class="stats-title">📊 Your Progress</h3>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-value" id="stat-games">0</span>
+              <span class="stat-label">Games Played</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="stat-correct">0</span>
+              <span class="stat-label">Correct Answers</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="stat-streak">0</span>
+              <span class="stat-label">Best Streak</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value" id="stat-countries">0</span>
+              <span class="stat-label">Countries Known</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievements Preview -->
+        <div class="achievements-preview">
+          <h3 class="achievements-title">🏆 Achievements</h3>
+          <div class="achievements-row" id="achievements-row">
+            <div class="achievement locked" title="Play your first game">🎮</div>
+            <div class="achievement locked" title="Get 10 correct answers">🎯</div>
+            <div class="achievement locked" title="5 in a row streak">🔥</div>
+            <div class="achievement locked" title="Master 25 countries">🌍</div>
+            <div class="achievement locked" title="Perfect round">⭐</div>
+            <div class="achievement locked" title="Speed demon">⚡</div>
+            <div class="achievement-more">+19 more</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Game Screen (dynamically populated) -->
+      <section id="game-screen" class="screen">
+        <!-- Game header -->
+        <div class="game-header">
+          <button class="back-btn" onclick="app.exitGame()">
+            ← Back
+          </button>
+          <div class="game-info">
+            <span class="game-mode-label" id="game-mode-label">Flag Master</span>
+            <span class="game-round" id="game-round">Round 1/10</span>
+          </div>
+          <div class="game-timer" id="game-timer">
+            <span class="timer-icon">⏱️</span>
+            <span class="timer-value">0:00</span>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+          <div class="progress-dots" id="progress-dots"></div>
+        </div>
+
+        <!-- Question area -->
+        <div class="question-area" id="question-area">
+          <!-- Dynamically populated based on game mode -->
+        </div>
+
+        <!-- Answer area -->
+        <div class="answer-area" id="answer-area">
+          <!-- Dynamically populated based on game mode -->
+        </div>
+
+        <!-- Feedback -->
+        <div class="feedback-area" id="feedback-area"></div>
+
+        <!-- Score display -->
+        <div class="score-display">
+          <div class="score-item">
+            <span class="score-icon">💎</span>
+            <span class="score-value" id="current-score">0</span>
+            <span class="score-label">Score</span>
+          </div>
+          <div class="score-item">
+            <span class="score-icon">🔥</span>
+            <span class="score-value" id="current-streak">0</span>
+            <span class="score-label">Streak</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Screen -->
+      <section id="results-screen" class="screen">
+        <div class="results-container">
+          <div class="results-header" id="results-header">
+            <div class="results-emoji">🎉</div>
+            <h2 class="results-title">Great Job!</h2>
+          </div>
+          
+          <div class="results-score-card">
+            <div class="results-stars" id="results-stars">⭐⭐⭐</div>
+            <div class="results-score" id="results-score">850</div>
+            <div class="results-label">Points Earned</div>
+          </div>
+
+          <div class="results-stats">
+            <div class="result-stat">
+              <span class="result-stat-value" id="result-correct">8/10</span>
+              <span class="result-stat-label">Correct</span>
+            </div>
+            <div class="result-stat">
+              <span class="result-stat-value" id="result-accuracy">80%</span>
+              <span class="result-stat-label">Accuracy</span>
+            </div>
+            <div class="result-stat">
+              <span class="result-stat-value" id="result-streak">5</span>
+              <span class="result-stat-label">Best Streak</span>
+            </div>
+          </div>
+
+          <div class="countries-learned" id="countries-learned">
+            <h4>Countries Learned:</h4>
+            <div class="country-flags"></div>
+          </div>
+
+          <div class="results-actions">
+            <button class="btn btn-primary btn-lg" onclick="app.playAgain()">
+              🔄 Play Again
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="app.navigate('home')">
+              🏠 Home
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal Container -->
+    <div id="modal-overlay" class="modal-overlay" onclick="app.closeModal()"></div>
+    <div id="modal" class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Modal Title</h3>
+        <button class="modal-close" onclick="app.closeModal()">×</button>
+      </div>
+      <div class="modal-content" id="modal-content"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="confetti-container" aria-hidden="true"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data/countries.js"></script>
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/utils/storage.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/components/toast.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/confetti.js"></script>
+  <script src="js/games/baseGame.js"></script>
+  <script src="js/games/flagMaster.js"></script>
+  <script src="js/games/capitalCities.js"></script>
+  <script src="js/games/factDetective.js"></script>
+  <script src="js/games/speedGeography.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
