@@ -32,8 +32,12 @@ class BaseGame {
    * Generate questions - Override in subclass
    */
   generateQuestions(difficulty, count) {
-    // Override in subclass
-    let pool = [...COUNTRIES];
+    // Use API-loaded countries with fallback to local data
+    const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0) 
+      ? GAME_COUNTRIES 
+      : COUNTRIES;
+    
+    let pool = [...countryData];
     
     if (difficulty && difficulty !== 'all') {
       pool = pool.filter(c => c.difficulty === difficulty);
@@ -80,8 +84,12 @@ class BaseGame {
    * Generate wrong options for multiple choice
    */
   generateOptions(correctCountry, count = 4) {
+    const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0) 
+      ? GAME_COUNTRIES 
+      : COUNTRIES;
+    
     const options = [correctCountry];
-    const others = COUNTRIES.filter(c => c.id !== correctCountry.id);
+    const others = countryData.filter(c => c.id !== correctCountry.id);
     const shuffled = Utils.shuffle(others);
     
     for (let i = 0; i < count - 1 && i < shuffled.length; i++) {

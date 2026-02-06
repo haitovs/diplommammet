@@ -33,9 +33,10 @@ class CapitalCitiesGame extends BaseGame {
 
     if (this.reverseMode) {
       // Show capital, guess country
+      const questionText = typeof t === 'function' ? t('games.whichCountryCapital') : 'Which country has this capital city?';
       questionArea.innerHTML = `
         <div class="question-prompt">
-          <p class="question-text">Which country has this capital city?</p>
+          <p class="question-text">${questionText}</p>
         </div>
         <div class="capital-display animate-scale-in">
           🏛️ ${question.capital}
@@ -49,7 +50,7 @@ class CapitalCitiesGame extends BaseGame {
             <button class="answer-option" 
                     data-id="${opt.id}" 
                     onclick="currentGame.handleAnswer('${opt.id}', this)">
-              <span class="option-flag">${opt.flag}</span>
+              ${Utils.renderFlag(opt, 'small')}
               <span class="option-text">${opt.name}</span>
               <span class="option-key">${i + 1}</span>
             </button>
@@ -60,12 +61,14 @@ class CapitalCitiesGame extends BaseGame {
       this.setupKeyboardShortcuts(options);
     } else {
       // Show country, guess capital
+      const questionText = typeof t === 'function' ? t('games.whatCapital') : 'What is the capital of this country?';
       questionArea.innerHTML = `
         <div class="question-prompt">
-          <p class="question-text">What is the capital of this country?</p>
+          <p class="question-text">${questionText}</p>
         </div>
         <div class="capital-display animate-scale-in">
-          ${question.flag} ${question.name}
+          ${Utils.renderFlag(question, 'medium')}
+          <span class="country-name">${question.name}</span>
         </div>
       `;
 
@@ -91,8 +94,12 @@ class CapitalCitiesGame extends BaseGame {
    * Generate capital options (for normal mode)
    */
   generateCapitalOptions(correctCountry, count = 4) {
+    const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0) 
+      ? GAME_COUNTRIES 
+      : COUNTRIES;
+    
     const options = [correctCountry];
-    const others = COUNTRIES.filter(c => c.id !== correctCountry.id && c.capital !== correctCountry.capital);
+    const others = countryData.filter(c => c.id !== correctCountry.id && c.capital !== correctCountry.capital);
     const shuffled = Utils.shuffle(others);
     
     for (let i = 0; i < count - 1 && i < shuffled.length; i++) {

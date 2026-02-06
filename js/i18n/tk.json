@@ -1,0 +1,94 @@
+{
+  "common": {
+    "play": "Oýna",
+    "home": "Baş sahypa",
+    "settings": "Sazlamalar",
+    "stats": "Statistika",
+    "back": "Yza",
+    "close": "Ýap",
+    "cancel": "Goýbolsun",
+    "confirm": "Tassykla",
+    "save": "Sakla",
+    "reset": "Täzeden başla",
+    "score": "Bal",
+    "streak": "Yzygider",
+    "correct": "Dogry",
+    "wrong": "Nädogry",
+    "skip": "Geç",
+    "hint": "Maslahat",
+    "next": "Indiki",
+    "finish": "Gutardy",
+    "playAgain": "Täzeden oýna",
+    "loading": "Ýüklenýär..."
+  },
+  "games": {
+    "flagMaster": "Baýdak ussady",
+    "flagMasterDesc": "Ýurtlary baýdaklary boýunça tana",
+    "capitalCities": "Paýtagt şäherleri",
+    "capitalCitiesDesc": "Ýurtlary paýtagtlary bilen gabat getir",
+    "shapeShifter": "Şekil çalşyjy",
+    "shapeShifterDesc": "Ýurtlary çyzgylary boýunça tana",
+    "factDetective": "Fakt detektiwi",
+    "factDetectiveDesc": "Maslahatlara görä ýurdy tap",
+    "speedGeography": "Tizlik geografiýasy",
+    "speedGeographyDesc": "30 sekuntlyk çalt synag — ähli ukyplaryňyzy barlaň!",
+    "whichCountryFlag": "Bu baýdak haýsy ýurda degişli?",
+    "whichCountryCapital": "Bu şäher haýsy ýurduň paýtagty?",
+    "whatCapital": "Bu ýurduň paýtagty näme?",
+    "whichCountryShape": "Bu şekil haýsy ýurda degişli?",
+    "whichCountryClues": "Haýsy ýurt bu maslahatlara gabat gelýär?",
+    "nameThisCountry": "Bu ýurdy adyňyz!",
+    "typeYourGuess": "Jogabyňyzy ýazyň...",
+    "guess": "Çakla",
+    "revealHint": "Maslahat görkez",
+    "hintsLeft": "{{count}} galdy",
+    "noHintsLeft": "Maslahat ýok",
+    "noMoreHints": "Başga maslahat ýok!"
+  },
+  "results": {
+    "greatJob": "Berekella!",
+    "perfectScore": "Ajaýyp netije!",
+    "goodEffort": "Gowy synanyşyk!",
+    "keepPracticing": "Türgenleşmegi dowam et!",
+    "gameOver": "Oýun gutardy!",
+    "pointsEarned": "Gazanylan bal",
+    "accuracy": "Takyklyk",
+    "bestStreak": "Iň gowy yzygider",
+    "countriesLearned": "Öwrenilen ýurtlar"
+  },
+  "stats": {
+    "yourProgress": "Siziň ösüşiňiz",
+    "gamesPlayed": "Oýnalan oýunlar",
+    "correctAnswers": "Dogry jogaplar",
+    "countriesKnown": "Bilinýän ýurtlar",
+    "achievements": "Üstünlikler",
+    "resetStats": "Statistikany arassala"
+  },
+  "hero": {
+    "eyebrow": "Geografiýa öwreniş oýny",
+    "title": "Dünýä barada",
+    "titleHighlight": "bilimiňizi barlaň",
+    "subtitle": "Ýurtlary, baýdaklary, paýtagtlary we gyzykly faktlary gyzykly mini-oýunlarda öwreniň. Hasap döretmek gerek däl — oýny saýlaň we başlaň!"
+  },
+  "nav": {
+    "chooseChallenge": "Synagyňyzy saýlaň",
+    "uniqueWays": "Geografiýa bilimiňizi barlamagyň 5 usuly",
+    "allLevels": "Ähli derejeler",
+    "easy": "Aňsat",
+    "medium": "Orta",
+    "hard": "Kyn",
+    "startChallenge": "Başla"
+  },
+  "feedback": {
+    "correctPoints": "Dogry! +{{points}} bal",
+    "notQuiteAnswerWas": "Dogry däl! Dogry jogap:",
+    "hintsUsed": "({{count}} maslahat ulanyldy)",
+    "noHintsNeeded": "(Maslahatsyz!)"
+  },
+  "modal": {
+    "startGame": "Oýny başla",
+    "chooseDifficulty": "Kynlyk derejesini saýlaň.",
+    "speedDesc": "30 sekuntlyk çalt synagda ähli ukyplaryňyzy barlaň!",
+    "confirmQuit": "Çykmak isleýärsiňizmi? Öňegidişlik ýitiriler."
+  }
+}

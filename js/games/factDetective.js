@@ -130,7 +130,11 @@ class FactDetectiveGame extends BaseGame {
         return;
       }
 
-      const matches = COUNTRIES
+      const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0) 
+        ? GAME_COUNTRIES 
+        : COUNTRIES;
+      
+      const matches = countryData
         .filter(c => c.name.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 5);
 
@@ -181,7 +185,11 @@ class FactDetectiveGame extends BaseGame {
     Utils.playSound(isCorrect ? 'correct' : 'wrong');
 
     // Find the country they guessed (for display)
-    const guessedCountry = COUNTRIES.find(c => 
+    const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0) 
+      ? GAME_COUNTRIES 
+      : COUNTRIES;
+    
+    const guessedCountry = countryData.find(c => 
       Utils.matchesAnswer(guess, c.name)
     );
 

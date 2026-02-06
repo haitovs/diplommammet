@@ -30,20 +30,33 @@
       <div class="header-brand" onclick="app.navigate('home')">
         <span class="logo">🌍</span>
         <span class="brand-text">GeoQuest</span>
+        <div id="online-indicator" class="online-indicator offline" title="Offline Mode - Local Data Pack" onclick="event.stopPropagation(); app.toggleMode()">
+          <span class="indicator-dot">●</span>
+          <span class="indicator-text">Offline</span>
+        </div>
       </div>
       <nav class="header-nav">
         <button class="nav-btn" onclick="app.navigate('home')" title="Home">
           <span class="nav-icon">🏠</span>
-          <span class="nav-label">Home</span>
+          <span class="nav-label" data-i18n="common.home">Home</span>
+        </button>
+        <button class="nav-btn" onclick="app.toggleMode()" title="Switch Data Mode">
+          <span class="nav-icon">🔄</span>
+          <span class="nav-label">Mode</span>
+        </button>
+        <button id="theme-toggle" class="nav-btn" onclick="Theme.toggle()" title="Switch Theme">
+          <span class="nav-icon">☀️</span>
+          <span class="nav-label">Light</span>
         </button>
         <button class="nav-btn" onclick="app.showStats()" title="Your Stats">
           <span class="nav-icon">📊</span>
-          <span class="nav-label">Stats</span>
+          <span class="nav-label" data-i18n="common.stats">Stats</span>
         </button>
         <button class="nav-btn" onclick="app.showSettings()" title="Settings">
           <span class="nav-icon">⚙️</span>
-          <span class="nav-label">Settings</span>
+          <span class="nav-label" data-i18n="common.settings">Settings</span>
         </button>
+        <div id="language-selector" class="language-selector"></div>
       </nav>
     </header>
 
@@ -54,11 +67,11 @@
         <!-- Hero Section -->
         <div class="hero">
           <div class="hero-content">
-            <p class="hero-eyebrow">🎮 Geography Learning Game</p>
+            <p class="hero-eyebrow">🎮 <span data-i18n="hero.eyebrow">Geography Learning Game</span></p>
             <h1 class="hero-title">
-              Test Your <span class="gradient-text">World Knowledge</span>
+              <span data-i18n="hero.title">Test Your</span> <span class="gradient-text" data-i18n="hero.titleHighlight">World Knowledge</span>
             </h1>
-            <p class="hero-subtitle">
+            <p class="hero-subtitle" data-i18n="hero.subtitle">
               Explore countries, flags, capitals, and fascinating facts through engaging mini-games. 
               No account needed — just pick a game and start playing!
             </p>
@@ -70,8 +83,8 @@
 
         <!-- Game Mode Cards -->
         <div class="section-header">
-          <h2 class="section-title">Choose Your Challenge</h2>
-          <p class="section-subtitle">5 unique ways to test your geography skills</p>
+          <h2 class="section-title" data-i18n="nav.chooseChallenge">Choose Your Challenge</h2>
+          <p class="section-subtitle" data-i18n="nav.uniqueWays">5 unique ways to test your geography skills</p>
         </div>
         
         <div class="game-grid">
@@ -79,56 +92,56 @@
           <article class="game-card" data-game="flags" onclick="app.startGame('flags')">
             <div class="game-card-icon">🏳️</div>
             <div class="game-card-content">
-              <h3 class="game-card-title">Flag Master</h3>
-              <p class="game-card-desc">Identify countries by their flags</p>
+              <h3 class="game-card-title" data-i18n="games.flagMaster">Flag Master</h3>
+              <p class="game-card-desc" data-i18n="games.flagMasterDesc">Identify countries by their flags</p>
               <div class="game-card-meta">
-                <span class="difficulty-badge easy">All Levels</span>
+                <span class="difficulty-badge easy" data-i18n="nav.allLevels">All Levels</span>
                 <span class="game-time">~5 min</span>
               </div>
             </div>
-            <button class="game-card-btn">Play</button>
+            <button class="game-card-btn" data-i18n="common.play">Play</button>
           </article>
 
           <!-- Capital Cities -->
           <article class="game-card" data-game="capitals" onclick="app.startGame('capitals')">
             <div class="game-card-icon">🏛️</div>
             <div class="game-card-content">
-              <h3 class="game-card-title">Capital Cities</h3>
-              <p class="game-card-desc">Match countries with their capitals</p>
+              <h3 class="game-card-title" data-i18n="games.capitalCities">Capital Cities</h3>
+              <p class="game-card-desc" data-i18n="games.capitalCitiesDesc">Match countries with their capitals</p>
               <div class="game-card-meta">
-                <span class="difficulty-badge medium">Medium</span>
+                <span class="difficulty-badge medium" data-i18n="nav.medium">Medium</span>
                 <span class="game-time">~5 min</span>
               </div>
             </div>
-            <button class="game-card-btn">Play</button>
+            <button class="game-card-btn" data-i18n="common.play">Play</button>
           </article>
 
           <!-- Shape Shifter -->
           <article class="game-card" data-game="shapes" onclick="app.startGame('shapes')">
             <div class="game-card-icon">🗺️</div>
             <div class="game-card-content">
-              <h3 class="game-card-title">Shape Shifter</h3>
-              <p class="game-card-desc">Recognize countries by their outline</p>
+              <h3 class="game-card-title" data-i18n="games.shapeShifter">Shape Shifter</h3>
+              <p class="game-card-desc" data-i18n="games.shapeShifterDesc">Recognize countries by their outline</p>
               <div class="game-card-meta">
-                <span class="difficulty-badge hard">Hard</span>
+                <span class="difficulty-badge hard" data-i18n="nav.hard">Hard</span>
                 <span class="game-time">~7 min</span>
               </div>
             </div>
-            <button class="game-card-btn">Play</button>
+            <button class="game-card-btn" data-i18n="common.play">Play</button>
           </article>
 
           <!-- Fact Detective -->
           <article class="game-card" data-game="facts" onclick="app.startGame('facts')">
             <div class="game-card-icon">🔍</div>
             <div class="game-card-content">
-              <h3 class="game-card-title">Fact Detective</h3>
-              <p class="game-card-desc">Guess countries from clever clues</p>
+              <h3 class="game-card-title" data-i18n="games.factDetective">Fact Detective</h3>
+              <p class="game-card-desc" data-i18n="games.factDetectiveDesc">Guess countries from clever clues</p>
               <div class="game-card-meta">
-                <span class="difficulty-badge medium">Medium</span>
+                <span class="difficulty-badge medium" data-i18n="nav.medium">Medium</span>
                 <span class="game-time">~8 min</span>
               </div>
             </div>
-            <button class="game-card-btn">Play</button>
+            <button class="game-card-btn" data-i18n="common.play">Play</button>
           </article>
         </div>
 
@@ -137,39 +150,39 @@
           <div class="speed-banner-content">
             <div class="speed-icon">⚡</div>
             <div class="speed-text">
-              <h3>Speed Geography</h3>
-              <p>30-second rapid-fire challenge — test all your skills!</p>
+              <h3 data-i18n="games.speedGeography">Speed Geography</h3>
+              <p data-i18n="games.speedGeographyDesc">30-second rapid-fire challenge — test all your skills!</p>
             </div>
           </div>
-          <button class="speed-btn">Start Challenge</button>
+          <button class="speed-btn" data-i18n="nav.startChallenge">Start Challenge</button>
         </div>
 
         <!-- Stats Preview -->
         <div class="stats-preview">
-          <h3 class="stats-title">📊 Your Progress</h3>
+          <h3 class="stats-title">📊 <span data-i18n="stats.yourProgress">Your Progress</span></h3>
           <div class="stats-grid">
             <div class="stat-item">
               <span class="stat-value" id="stat-games">0</span>
-              <span class="stat-label">Games Played</span>
+              <span class="stat-label" data-i18n="stats.gamesPlayed">Games Played</span>
             </div>
             <div class="stat-item">
               <span class="stat-value" id="stat-correct">0</span>
-              <span class="stat-label">Correct Answers</span>
+              <span class="stat-label" data-i18n="stats.correctAnswers">Correct Answers</span>
             </div>
             <div class="stat-item">
               <span class="stat-value" id="stat-streak">0</span>
-              <span class="stat-label">Best Streak</span>
+              <span class="stat-label" data-i18n="results.bestStreak">Best Streak</span>
             </div>
             <div class="stat-item">
               <span class="stat-value" id="stat-countries">0</span>
-              <span class="stat-label">Countries Known</span>
+              <span class="stat-label" data-i18n="stats.countriesKnown">Countries Known</span>
             </div>
           </div>
         </div>
 
         <!-- Achievements Preview -->
         <div class="achievements-preview">
-          <h3 class="achievements-title">🏆 Achievements</h3>
+          <h3 class="achievements-title">🏆 <span data-i18n="stats.achievements">Achievements</span></h3>
           <div class="achievements-row" id="achievements-row">
             <div class="achievement locked" title="Play your first game">🎮</div>
             <div class="achievement locked" title="Get 10 correct answers">🎯</div>
@@ -298,17 +311,21 @@
 
   <!-- Scripts -->
   <script src="js/data/countries.js"></script>
+  <script src="js/services/countryAPI.js"></script>
   <script src="js/utils/helpers.js"></script>
   <script src="js/utils/storage.js"></script>
   <script src="js/state.js"></script>
+  <script src="js/i18n/index.js"></script>
   <script src="js/components/toast.js"></script>
   <script src="js/components/modal.js"></script>
   <script src="js/components/confetti.js"></script>
   <script src="js/games/baseGame.js"></script>
   <script src="js/games/flagMaster.js"></script>
   <script src="js/games/capitalCities.js"></script>
+  <script src="js/games/shapeShifter.js"></script>
   <script src="js/games/factDetective.js"></script>
   <script src="js/games/speedGeography.js"></script>
+  <script src="js/theme.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

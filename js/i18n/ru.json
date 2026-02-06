@@ -1,0 +1,94 @@
+{
+  "common": {
+    "play": "Играть",
+    "home": "Главная",
+    "settings": "Настройки",
+    "stats": "Статистика",
+    "back": "Назад",
+    "close": "Закрыть",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "save": "Сохранить",
+    "reset": "Сбросить",
+    "score": "Счёт",
+    "streak": "Серия",
+    "correct": "Правильно",
+    "wrong": "Неправильно",
+    "skip": "Пропустить",
+    "hint": "Подсказка",
+    "next": "Далее",
+    "finish": "Завершить",
+    "playAgain": "Играть снова",
+    "loading": "Загрузка..."
+  },
+  "games": {
+    "flagMaster": "Мастер флагов",
+    "flagMasterDesc": "Определите страны по их флагам",
+    "capitalCities": "Столицы мира",
+    "capitalCitiesDesc": "Сопоставьте страны с их столицами",
+    "shapeShifter": "Контуры стран",
+    "shapeShifterDesc": "Узнайте страны по их контуру",
+    "factDetective": "Детектив фактов",
+    "factDetectiveDesc": "Угадайте страну по подсказкам",
+    "speedGeography": "Скоростная география",
+    "speedGeographyDesc": "30-секундный блиц-турнир — проверьте все навыки!",
+    "whichCountryFlag": "Какой стране принадлежит этот флаг?",
+    "whichCountryCapital": "Столицей какой страны является этот город?",
+    "whatCapital": "Какая столица у этой страны?",
+    "whichCountryShape": "Какой стране принадлежит этот контур?",
+    "whichCountryClues": "Какая страна соответствует этим подсказкам?",
+    "nameThisCountry": "Назовите эту страну!",
+    "typeYourGuess": "Введите ваш ответ...",
+    "guess": "Ответить",
+    "revealHint": "Показать подсказку",
+    "hintsLeft": "Осталось: {{count}}",
+    "noHintsLeft": "Подсказок нет",
+    "noMoreHints": "Больше подсказок нет!"
+  },
+  "results": {
+    "greatJob": "Отлично!",
+    "perfectScore": "Идеальный результат!",
+    "goodEffort": "Хорошая попытка!",
+    "keepPracticing": "Продолжайте практиковаться!",
+    "gameOver": "Игра окончена!",
+    "pointsEarned": "Набрано очков",
+    "accuracy": "Точность",
+    "bestStreak": "Лучшая серия",
+    "countriesLearned": "Изучено стран"
+  },
+  "stats": {
+    "yourProgress": "Ваш прогресс",
+    "gamesPlayed": "Игр сыграно",
+    "correctAnswers": "Правильных ответов",
+    "countriesKnown": "Стран изучено",
+    "achievements": "Достижения",
+    "resetStats": "Сбросить статистику"
+  },
+  "hero": {
+    "eyebrow": "Игра для изучения географии",
+    "title": "Проверьте свои",
+    "titleHighlight": "знания о мире",
+    "subtitle": "Исследуйте страны, флаги, столицы и интересные факты в увлекательных мини-играх. Регистрация не нужна — просто выберите игру и начните!"
+  },
+  "nav": {
+    "chooseChallenge": "Выберите испытание",
+    "uniqueWays": "5 уникальных способов проверить знания географии",
+    "allLevels": "Все уровни",
+    "easy": "Легко",
+    "medium": "Средне",
+    "hard": "Сложно",
+    "startChallenge": "Начать"
+  },
+  "feedback": {
+    "correctPoints": "Правильно! +{{points}} очков",
+    "notQuiteAnswerWas": "Не совсем! Правильный ответ:",
+    "hintsUsed": "(использовано подсказок: {{count}})",
+    "noHintsNeeded": "(Без подсказок!)"
+  },
+  "modal": {
+    "startGame": "Начать игру",
+    "chooseDifficulty": "Выберите уровень сложности.",
+    "speedDesc": "Проверьте все навыки в 30-секундном блиц-турнире!",
+    "confirmQuit": "Вы уверены, что хотите выйти? Прогресс будет потерян."
+  }
+}

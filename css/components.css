@@ -10,10 +10,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+  margin: var(--space-md);
   margin-bottom: var(--space-lg);
 }
 
@@ -136,6 +137,7 @@
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
+  margin: var(--space-md);
   margin-bottom: var(--space-lg);
   min-height: 300px;
 }
@@ -146,8 +148,9 @@
 }
 
 .question-text {
-  font-size: 1.25rem;
-  color: var(--text-secondary);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 /* Flag display */
@@ -172,16 +175,49 @@
   object-fit: cover;
 }
 
+/* Flag image helper classes */
+.flag-img {
+  max-width: 280px;
+  max-height: 180px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.answer-option .flag-img {
+  width: 40px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.flag-emoji {
+  font-size: inherit;
+}
+
 /* Capital display */
 .capital-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
   font-family: var(--font-heading);
-  font-size: 3rem;
-  font-weight: 800;
+  font-size: 2rem;
+  font-weight: 700;
   text-align: center;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
+  padding: var(--space-xl);
+  background: var(--bg-card);
+  border: 2px solid var(--border-accent);
+  border-radius: var(--radius-xl);
+}
+
+.capital-display .flag-img {
+  width: 80px;
+  height: auto;
+}
+
+.capital-display .country-name {
+  color: var(--text-primary);
 }
 
 /* Facts display */
@@ -232,6 +268,7 @@
    Answer Area
    ============================================ */
 .answer-area {
+  margin: var(--space-md);
   margin-bottom: var(--space-lg);
 }
 
@@ -240,19 +277,22 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-md);
+  padding: var(--space-md);
 }
 
 .answer-option {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-lg) var(--space-xl);
   background: var(--bg-card);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--transition-fast);
   text-align: left;
+  color: var(--text-primary);
+  min-height: 70px;
 }
 
 .answer-option:hover:not(:disabled):not(.selected) {
@@ -290,20 +330,24 @@
 .option-text {
   font-weight: 600;
   font-size: 1.1rem;
+  color: var(--text-primary);
+  flex: 1;
 }
 
 .option-key {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: rgba(99, 102, 241, 0.2);
+  width: 28px;
+  height: 28px;
+  background: rgba(99, 102, 241, 0.3);
   border: 1px solid var(--border-accent);
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 /* Text input answer */
@@ -971,5 +1015,53 @@
   .toast {
     min-width: auto;
     width: 100%;
+  }
+}
+
+/* ============================================
+   Language Selector
+   ============================================ */
+.language-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-left: var(--space-sm);
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.lang-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: var(--border-accent);
+  transform: scale(1.05);
+}
+
+.lang-btn.active {
+  background: var(--gradient-primary);
+  border-color: var(--primary-500);
+  box-shadow: var(--glow-primary);
+}
+
+@media (max-width: 768px) {
+  .language-selector {
+    margin-left: 0;
+  }
+  
+  .lang-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
   }
 }

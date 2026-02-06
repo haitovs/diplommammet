@@ -7,7 +7,7 @@ class SpeedGeographyGame extends BaseGame {
   constructor() {
     super('speed');
     this.timer = null;
-    this.questionTypes = ['flag', 'capital'];
+    this.questionTypes = ['flag', 'capital', 'shape']; // Added shape for variety
   }
 
   /**
@@ -57,7 +57,10 @@ class SpeedGeographyGame extends BaseGame {
   updateTimerDisplay() {
     const timerEl = document.querySelector('.timer-value');
     if (timerEl) {
-      timerEl.textContent = `0:${State.game.timeRemaining.toString().padStart(2, '0')}`;
+      const time = Math.max(0, Math.min(State.game.timeRemaining, 999));
+      const mins = Math.floor(time / 60);
+      const secs = time % 60;
+      timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
     }
   }
 
@@ -90,6 +93,19 @@ class SpeedGeographyGame extends BaseGame {
         </div>
         <div class="flag-display animate-scale-in" style="font-size: 6rem;">
           ${question.flag}
+        </div>
+      `;
+    } else if (question.questionType === 'shape') {
+      const countryCode = question.id.toLowerCase();
+      const outlineSvgUrl = `https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${countryCode}/vector.svg`;
+      questionArea.innerHTML = `
+        <div class="question-prompt">
+          <p class="question-text">🗺️ Name this country!</p>
+        </div>
+        <div class="shape-display animate-scale-in">
+          <img src="${outlineSvgUrl}" alt="Country shape" 
+               style="filter: brightness(0); max-width: 120px; max-height: 120px;"
+               onerror="this.parentElement.innerHTML='${question.flag}';">
         </div>
       `;
     } else {

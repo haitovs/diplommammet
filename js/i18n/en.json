@@ -1,0 +1,94 @@
+{
+  "common": {
+    "play": "Play",
+    "home": "Home",
+    "settings": "Settings",
+    "stats": "Stats",
+    "back": "Back",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "reset": "Reset",
+    "score": "Score",
+    "streak": "Streak",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "skip": "Skip",
+    "hint": "Hint",
+    "next": "Next",
+    "finish": "Finish",
+    "playAgain": "Play Again",
+    "loading": "Loading..."
+  },
+  "games": {
+    "flagMaster": "Flag Master",
+    "flagMasterDesc": "Identify countries by their flags",
+    "capitalCities": "Capital Cities",
+    "capitalCitiesDesc": "Match countries with their capitals",
+    "shapeShifter": "Shape Shifter",
+    "shapeShifterDesc": "Recognize countries by their outline",
+    "factDetective": "Fact Detective",
+    "factDetectiveDesc": "Guess countries from clever clues",
+    "speedGeography": "Speed Geography",
+    "speedGeographyDesc": "30-second rapid-fire challenge — test all your skills!",
+    "whichCountryFlag": "Which country does this flag belong to?",
+    "whichCountryCapital": "Which country has this capital city?",
+    "whatCapital": "What is the capital of this country?",
+    "whichCountryShape": "Which country has this shape?",
+    "whichCountryClues": "Which country matches these clues?",
+    "nameThisCountry": "Name this country!",
+    "typeYourGuess": "Type your guess...",
+    "guess": "Guess",
+    "revealHint": "Get Hint",
+    "hintsLeft": "{{count}} left",
+    "noHintsLeft": "No hints left",
+    "noMoreHints": "No more hints available!"
+  },
+  "results": {
+    "greatJob": "Great Job!",
+    "perfectScore": "Perfect Score!",
+    "goodEffort": "Good Effort!",
+    "keepPracticing": "Keep Practicing!",
+    "gameOver": "Game Over!",
+    "pointsEarned": "Points Earned",
+    "accuracy": "Accuracy",
+    "bestStreak": "Best Streak",
+    "countriesLearned": "Countries Learned"
+  },
+  "stats": {
+    "yourProgress": "Your Progress",
+    "gamesPlayed": "Games Played",
+    "correctAnswers": "Correct Answers",
+    "countriesKnown": "Countries Known",
+    "achievements": "Achievements",
+    "resetStats": "Reset All Stats"
+  },
+  "hero": {
+    "eyebrow": "Geography Learning Game",
+    "title": "Test Your",
+    "titleHighlight": "World Knowledge",
+    "subtitle": "Explore countries, flags, capitals, and fascinating facts through engaging mini-games. No account needed — just pick a game and start playing!"
+  },
+  "nav": {
+    "chooseChallenge": "Choose Your Challenge",
+    "uniqueWays": "5 unique ways to test your geography skills",
+    "allLevels": "All Levels",
+    "easy": "Easy",
+    "medium": "Medium",
+    "hard": "Hard",
+    "startChallenge": "Start Challenge"
+  },
+  "feedback": {
+    "correctPoints": "Correct! +{{points}} points",
+    "notQuiteAnswerWas": "Not quite! The answer was:",
+    "hintsUsed": "({{count}} hint(s) used)",
+    "noHintsNeeded": "(No hints needed!)"
+  },
+  "modal": {
+    "startGame": "Start Game",
+    "chooseDifficulty": "Choose your difficulty level to begin.",
+    "speedDesc": "Test all your skills in a 30-second rapid-fire challenge!",
+    "confirmQuit": "Are you sure you want to quit? Your progress will be lost."
+  }
+}

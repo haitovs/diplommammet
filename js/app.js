@@ -5,17 +5,32 @@
 // Global game instance
 let currentGame = null;
 
+// Countries data (loaded from API or fallback)
+let GAME_COUNTRIES = [];
+
 const app = {
+  isLoading: false,
+  isOnline: false, // Default to offline
+  mode: 'offline', // 'offline' or 'online'
+
   /**
    * Initialize the application
    */
-  init() {
+  async init() {
     console.log('🌍 GeoQuest initializing...');
     
     // Initialize components
     Toast.init();
     Modal.init();
     Confetti.init();
+    Theme.init();
+    await i18n.init();
+
+    // Default to offline mode for stability
+    Utils.offlineMode = true;
+
+    // Load country data (from local source initially)
+    await this.loadCountryData();
 
     // Load and display stats
     this.updateStatsDisplay();
@@ -27,7 +42,99 @@ const app = {
     // Create particles
     this.createParticles();
 
+    // Update UI for current mode
+    this.updateModeUI();
+
     console.log('✅ GeoQuest ready!');
+  },
+
+  /**
+   * Toggle between Offline and Online modes
+   */
+  async toggleMode() {
+    this.mode = this.mode === 'offline' ? 'online' : 'offline';
+    Utils.offlineMode = (this.mode === 'offline');
+    this.isOnline = (this.mode === 'online');
+    
+    this.showLoading(true);
+    await this.loadCountryData();
+    this.updateModeUI();
+    this.showLoading(false);
+    
+    Toast.show(
+      this.mode === 'online' ? 'Switched to Online Mode' : 'Switched to Offline Mode',
+      this.mode === 'online' ? 'success' : 'info'
+    );
+  },
+
+  /**
+   * Update UI based on current mode
+   */
+  updateModeUI() {
+    // Update indicator
+    const indicator = document.getElementById('online-indicator');
+    if (indicator) {
+      indicator.className = `online-indicator ${this.mode === 'online' ? 'online' : 'offline'}`;
+      indicator.title = this.mode === 'online' ? 'Online Mode - Live API Data' : 'Offline Mode - Local Data Pack';
+      
+      // Update text/icon inside indicator area
+      const text = indicator.querySelector('.indicator-text');
+      if (text) text.textContent = this.mode === 'online' ? 'Online' : 'Offline';
+    }
+
+    // Update Game Titles/Descriptions if needed
+    document.body.classList.toggle('mode-online', this.mode === 'online');
+  },
+
+  /**
+   * Load country data based on mode
+   */
+  async loadCountryData() {
+    this.showLoading(true);
+    
+    try {
+      if (this.mode === 'online' && typeof CountryAPI !== 'undefined') {
+        const apiCountries = await CountryAPI.init();
+        
+        // Merge with local facts data
+        if (typeof COUNTRIES !== 'undefined' && apiCountries.length > 0) {
+          GAME_COUNTRIES = CountryAPI.mergeWithLocalFacts(apiCountries, COUNTRIES);
+        } else if (apiCountries.length > 0) {
+          GAME_COUNTRIES = apiCountries;
+        } else {
+          // API failed, fallback
+          console.warn('API returned no data, falling back to local');
+          GAME_COUNTRIES = COUNTRIES || [];
+          this.mode = 'offline';
+          Utils.offlineMode = true;
+          this.isOnline = false;
+        }
+        console.log(`📊 [Online] Loaded ${GAME_COUNTRIES.length} countries`);
+      } else {
+        // Offline Mode
+        GAME_COUNTRIES = COUNTRIES || [];
+        console.log(`📊 [Offline] Loaded ${GAME_COUNTRIES.length} countries`);
+      }
+    } catch (error) {
+      console.error('Failed to load countries:', error);
+      GAME_COUNTRIES = COUNTRIES || [];
+      this.mode = 'offline';
+      Utils.offlineMode = true;
+      this.isOnline = false;
+    }
+    
+    this.showLoading(false);
+  },
+
+  /**
+   * Show/hide loading state
+   */
+  showLoading(show) {
+    this.isLoading = show;
+    const hero = document.querySelector('.hero');
+    if (hero) {
+      hero.classList.toggle('loading', show);
+    }
   },
 
   /**
@@ -71,6 +178,12 @@ const app = {
   launchGame(mode, difficulty) {
     this.navigate('game');
 
+    // Set mode on game screen for theming
+    const gameScreen = document.getElementById('game-screen');
+    if (gameScreen) {
+      gameScreen.dataset.mode = mode;
+    }
+
     // Create appropriate game instance
     switch (mode) {
       case 'flags':
@@ -78,6 +191,9 @@ const app = {
         break;
       case 'capitals':
         currentGame = new CapitalCitiesGame();
+        break;
+      case 'shapes':
+        currentGame = new ShapeShifterGame();
         break;
       case 'facts':
         currentGame = new FactDetectiveGame();

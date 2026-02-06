@@ -105,6 +105,7 @@ const Utils = {
    * Calculate stars based on score percentage
    */
   calculateStars(correct, total) {
+    if (total === 0) return 0;
     const percentage = (correct / total) * 100;
     if (percentage >= 90) return 3;
     if (percentage >= 70) return 2;
@@ -192,7 +193,8 @@ const Utils = {
       wrong: { freq: 200, duration: 0.3 },
       click: { freq: 600, duration: 0.05 },
       success: { freq: 1000, duration: 0.2 },
-      tick: { freq: 400, duration: 0.05 }
+      tick: { freq: 400, duration: 0.05 },
+      hint: { freq: 500, duration: 0.1 }
     };
     
     const sound = sounds[soundName] || sounds.click;
@@ -201,6 +203,59 @@ const Utils = {
     
     oscillator.start();
     oscillator.stop(audioContext.currentTime + sound.duration);
+  },
+
+  /**
+   * Offline mode flag
+   */
+  offlineMode: true,
+
+  /**
+   * Render flag as image or emoji
+   */
+  renderFlag(country, size = 'medium') {
+    if (!country) return '🏳️';
+    
+    // Check if offline mode and local image likely exists (basic check by ID)
+    if (this.offlineMode) {
+      // Local path: assets/flags/{id}.png
+      // Fallback to CDN if load fails (handled by onerror)
+      return `<img 
+        src="assets/flags/${country.id}.png" 
+        alt="${country.name}" 
+        class="flag-img" 
+        onerror="this.src='https://flagcdn.com/w320/${country.id}.png'; this.onerror=null;" 
+      />`;
+    }
+
+    const flag = country.flag || '';
+    const flagEmoji = country.flagEmoji || this.getEmojiFlag(country.id) || '🏳️';
+    
+    // Online mode: Check if flag is a URL
+    if (flag.startsWith('http')) {
+      return `<img src="${flag}" alt="${country.name || 'Flag'}" class="flag-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';" /><span class="flag-emoji" style="display:none;">${flagEmoji}</span>`;
+    }
+    
+    // If flag is emoji or short string
+    if (flag.length <= 4 || !flag.includes('/')) {
+      return `<span class="flag-emoji">${flag || flagEmoji}</span>`;
+    }
+    
+    return `<span class="flag-emoji">${flagEmoji}</span>`;
+  },
+
+  /**
+   * Get emoji flag from country code
+   */
+  getEmojiFlag(countryCode) {
+    if (!countryCode) return '🏳️';
+    const code = countryCode.toUpperCase();
+    const offset = 127397;
+    try {
+      return String.fromCodePoint(...[...code].map(c => c.charCodeAt(0) + offset));
+    } catch (e) {
+      return '🏳️';
+    }
   }
 };
 

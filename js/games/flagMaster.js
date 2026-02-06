@@ -18,13 +18,18 @@ class FlagMasterGame extends BaseGame {
     // Generate 4 options including correct answer
     const options = this.generateOptions(question, 4);
 
-    // Render question
+    // Use helper to render flag properly
+    const flagDisplay = Utils.renderFlag(question, 'large');
+
+    // Render question with translated text
+    const questionText = typeof t === 'function' ? t('games.whichCountryFlag') : 'Which country does this flag belong to?';
+    
     questionArea.innerHTML = `
       <div class="question-prompt">
-        <p class="question-text">Which country does this flag belong to?</p>
+        <p class="question-text">${questionText}</p>
       </div>
       <div class="flag-display animate-scale-in">
-        ${question.flag}
+        ${flagDisplay}
       </div>
     `;
 
