@@ -3,5 +3,5 @@ services:
     build: .
     container_name: mammet-geoquest
     ports:
-      - "4083:80"
+      - "4083:4083"
     restart: unless-stopped

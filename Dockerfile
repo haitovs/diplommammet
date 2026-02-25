@@ -9,5 +9,5 @@ COPY js/ /usr/share/nginx/html/js/
 COPY assets/ /usr/share/nginx/html/assets/
 COPY tools/ /usr/share/nginx/html/tools/
 
-EXPOSE 80
+EXPOSE 4083
 CMD ["nginx", "-g", "daemon off;"]
