@@ -78,7 +78,7 @@ class ShapeShifterGame extends BaseGame {
                   data-id="${opt.id}" 
                   onclick="currentGame.handleAnswer('${opt.id}', this)">
             <span class="option-key">${i + 1}</span>
-            <span class="option-text">${opt.name}</span>
+            <span class="option-text">${Utils.getCountryDisplayName(opt)}</span>
           </button>
         `).join('')}
       </div>
@@ -102,9 +102,9 @@ class ShapeShifterGame extends BaseGame {
     Utils.playSound('hint');
 
     const hints = [
-      { icon: '🌍', text: `Continent: ${question.continent}` },
-      { icon: '📍', text: `Region: ${question.region}` },
-      { icon: '🏙️', text: `Capital: ${question.capital}` }
+      { icon: '🌍', text: t('games.continentHint', { value: Utils.getCountryContinent(question) }) },
+      { icon: '📍', text: t('games.regionHint', { value: Utils.getCountryRegion(question) }) },
+      { icon: '🏙️', text: t('games.capitalHint', { value: Utils.getCountryCapital(question) }) }
     ];
 
     const hint = hints[this.hintsUsed - 1];
@@ -126,9 +126,9 @@ class ShapeShifterGame extends BaseGame {
     const hintBtn = document.querySelector('.hint-btn');
     if (this.hintsUsed >= this.maxHints) {
       hintBtn.disabled = true;
-      hintBtn.textContent = '💡 No hints left';
+      hintBtn.textContent = `💡 ${t('games.noHintsLeft')}`;
     } else {
-      hintBtn.textContent = `💡 Get Hint (${this.maxHints - this.hintsUsed} left)`;
+      hintBtn.textContent = `💡 ${t('games.revealHint')} (${t('games.hintsLeft', { count: this.maxHints - this.hintsUsed })})`;
     }
 
     // Update hint dots
@@ -183,24 +183,25 @@ class ShapeShifterGame extends BaseGame {
     
     if (isCorrect) {
       const hintMessage = this.hintsUsed > 0 
-        ? ` (${this.hintsUsed} hint${this.hintsUsed > 1 ? 's' : ''} used)`
-        : ' (No hints needed!)';
+        ? ` ${t('feedback.hintsUsed', { count: this.hintsUsed })}`
+        : ` ${t('feedback.noHintsNeeded')}`;
       
       feedbackArea.innerHTML = `
         <div class="feedback-message correct">
           <span class="feedback-icon">✅</span>
           <div>
-            <span class="feedback-text">Correct! +${points} points${hintMessage}</span>
+            <span class="feedback-text">${t('feedback.correctPoints', { points })}${hintMessage}</span>
           </div>
         </div>
       `;
     } else {
+      const answer = `${question.flagEmoji || question.flag || ''} ${Utils.getCountryDisplayName(question)}`.trim();
       feedbackArea.innerHTML = `
         <div class="feedback-message wrong">
           <span class="feedback-icon">❌</span>
           <div>
-            <span class="feedback-text">Not quite!</span>
-            <p class="correct-answer">This is: ${question.flagEmoji || ''} ${question.name}</p>
+            <span class="feedback-text">${t('feedback.notQuite')}</span>
+            <p class="correct-answer">${t('feedback.thisIs', { answer })}</p>
           </div>
         </div>
       `;

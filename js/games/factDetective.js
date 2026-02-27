@@ -8,6 +8,26 @@ class FactDetectiveGame extends BaseGame {
     super('facts');
     this.revealedFacts = 0;
     this.maxFacts = 5;
+    this.autocompleteHandler = null;
+    this.suggestionsClickHandler = null;
+  }
+
+  /**
+   * Use only countries with available fact clues
+   */
+  generateQuestions(difficulty, count) {
+    const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0)
+      ? GAME_COUNTRIES
+      : COUNTRIES;
+
+    let pool = countryData.filter(country => Utils.getCountryFacts(country).length > 0);
+
+    if (difficulty && difficulty !== 'all') {
+      pool = pool.filter(c => c.difficulty === difficulty);
+    }
+
+    this.questions = Utils.shuffle(pool).slice(0, count);
+    State.game.questions = this.questions;
   }
 
   /**
@@ -20,10 +40,17 @@ class FactDetectiveGame extends BaseGame {
     this.revealedFacts = 1; // Start with one fact revealed
     State.game.hintsUsed = 0;
 
+    const questionText = t('games.whichCountryClues');
+    const inputPlaceholder = t('games.typeYourGuess');
+    const guessText = t('games.guess');
+    const revealHintText = t('games.revealHint');
+    const hintsLeftText = t('games.hintsLeft', { count: this.maxFacts - this.revealedFacts });
+    const skipText = t('common.skip');
+
     // Render question with facts
     questionArea.innerHTML = `
       <div class="question-prompt">
-        <p class="question-text">Which country matches these clues?</p>
+        <p class="question-text">${questionText}</p>
       </div>
       <div class="facts-display">
         ${this.renderFacts(question)}
@@ -36,20 +63,20 @@ class FactDetectiveGame extends BaseGame {
         <input type="text" 
                class="answer-input" 
                id="fact-answer-input"
-               placeholder="Type your guess..."
+               placeholder="${inputPlaceholder}"
                autocomplete="off"
                onkeydown="if(event.key === 'Enter') currentGame.submitAnswer()">
         <button class="submit-btn" onclick="currentGame.submitAnswer()">
-          Guess
+          ${guessText}
         </button>
       </div>
       <div style="display: flex; justify-content: center; gap: var(--space-md); margin-top: var(--space-md);">
         <button class="hint-btn" id="reveal-hint-btn" onclick="currentGame.revealNextFact()">
-          💡 Reveal Hint
-          <span class="hint-count">${this.maxFacts - this.revealedFacts} left</span>
+          💡 ${revealHintText}
+          <span class="hint-count">${hintsLeftText}</span>
         </button>
         <button class="skip-btn" onclick="currentGame.skipQuestion()">
-          Skip →
+          ${skipText} →
         </button>
       </div>
       <div id="suggestions" class="suggestions" style="margin-top: var(--space-md);"></div>
@@ -69,7 +96,7 @@ class FactDetectiveGame extends BaseGame {
    * Render facts with reveal state
    */
   renderFacts(question) {
-    const facts = question.facts || [];
+    const facts = Utils.getCountryFacts(question);
     
     return facts.map((fact, i) => {
       const isRevealed = i < this.revealedFacts;
@@ -87,8 +114,9 @@ class FactDetectiveGame extends BaseGame {
    */
   revealNextFact() {
     const question = this.getCurrentQuestion();
-    if (this.revealedFacts >= this.maxFacts || this.revealedFacts >= question.facts.length) {
-      Toast.info('No more hints available!');
+    const facts = Utils.getCountryFacts(question);
+    if (this.revealedFacts >= this.maxFacts || this.revealedFacts >= facts.length) {
+      Toast.info(t('games.noMoreHints'));
       return;
     }
 
@@ -108,9 +136,9 @@ class FactDetectiveGame extends BaseGame {
       const remaining = Math.max(0, this.maxFacts - this.revealedFacts);
       if (remaining === 0) {
         hintBtn.disabled = true;
-        hintBtn.innerHTML = '💡 No more hints';
+        hintBtn.innerHTML = `💡 ${t('games.noHintsLeft')}`;
       } else {
-        hintBtn.querySelector('.hint-count').textContent = `${remaining} left`;
+        hintBtn.querySelector('.hint-count').textContent = t('games.hintsLeft', { count: remaining });
       }
     }
   }
@@ -123,9 +151,10 @@ class FactDetectiveGame extends BaseGame {
     const suggestions = document.getElementById('suggestions');
     if (!input || !suggestions) return;
 
-    input.addEventListener('input', Utils.debounce((e) => {
+    this.autocompleteHandler = Utils.debounce((e) => {
       const value = e.target.value.trim();
-      if (value.length < 2) {
+      const normalizedValue = Utils.normalizeAnswer(value);
+      if (normalizedValue.length < 2) {
         suggestions.innerHTML = '';
         return;
       }
@@ -135,28 +164,50 @@ class FactDetectiveGame extends BaseGame {
         : COUNTRIES;
       
       const matches = countryData
-        .filter(c => c.name.toLowerCase().includes(value.toLowerCase()))
+        .filter(c => {
+          return Utils.getCountryAnswerAliases(c).some(alias => {
+            return Utils.normalizeAnswer(alias).includes(normalizedValue);
+          });
+        })
         .slice(0, 5);
 
       if (matches.length > 0) {
         suggestions.innerHTML = matches.map(c => `
-          <button class="suggestion-btn" onclick="currentGame.selectSuggestion('${c.name}')">
-            ${c.flag} ${c.name}
+          <button class="suggestion-btn" type="button" data-country-id="${c.id}">
+            <span class="suggestion-flag">${(typeof c.flag === 'string' && !c.flag.startsWith('http')) ? c.flag : (c.flagEmoji || Utils.getEmojiFlag(c.id))}</span>
+            <span class="suggestion-name">${Utils.getCountryDisplayName(c)}</span>
           </button>
         `).join('');
       } else {
         suggestions.innerHTML = '';
       }
-    }, 150));
+    }, 150);
+    input.addEventListener('input', this.autocompleteHandler);
+
+    this.suggestionsClickHandler = (event) => {
+      const button = event.target.closest('.suggestion-btn');
+      if (!button) return;
+      const { countryId } = button.dataset;
+      if (countryId) {
+        this.selectSuggestion(countryId);
+      }
+    };
+    suggestions.addEventListener('click', this.suggestionsClickHandler);
   }
 
   /**
    * Select a suggestion
    */
-  selectSuggestion(name) {
+  selectSuggestion(countryId) {
+    const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0) 
+      ? GAME_COUNTRIES 
+      : COUNTRIES;
+    const selectedCountry = countryData.find(c => c.id === countryId);
+    if (!selectedCountry) return;
+
     const input = document.getElementById('fact-answer-input');
     if (input) {
-      input.value = name;
+      input.value = Utils.getCountryDisplayName(selectedCountry);
       document.getElementById('suggestions').innerHTML = '';
       this.submitAnswer();
     }
@@ -172,26 +223,17 @@ class FactDetectiveGame extends BaseGame {
     const guess = input?.value.trim();
 
     if (!guess) {
-      Toast.warning('Please type a country name');
+      Toast.warning(t('games.pleaseTypeCountry'));
       return;
     }
 
     const question = this.getCurrentQuestion();
     
     // Check if answer matches
-    const isCorrect = Utils.matchesAnswer(guess, question.name);
+    const isCorrect = Utils.matchesCountryAnswer(guess, question);
     
     this.answered = true;
     Utils.playSound(isCorrect ? 'correct' : 'wrong');
-
-    // Find the country they guessed (for display)
-    const countryData = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0) 
-      ? GAME_COUNTRIES 
-      : COUNTRIES;
-    
-    const guessedCountry = countryData.find(c => 
-      Utils.matchesAnswer(guess, c.name)
-    );
 
     State.recordAnswer(isCorrect, question.id);
 
@@ -203,7 +245,7 @@ class FactDetectiveGame extends BaseGame {
       this.showFactFeedback(true, question, points);
       Confetti.burst();
     } else {
-      this.showFactFeedback(false, question, guessedCountry);
+      this.showFactFeedback(false, question);
     }
 
     this.updateScoreDisplay();
@@ -218,26 +260,28 @@ class FactDetectiveGame extends BaseGame {
   /**
    * Show feedback for fact answers
    */
-  showFactFeedback(isCorrect, question, pointsOrGuess) {
+  showFactFeedback(isCorrect, question, points = 0) {
     const feedbackArea = document.getElementById('feedback-area');
     
     if (isCorrect) {
+      const answer = `${question.flag} ${Utils.getCountryDisplayName(question)}`;
       feedbackArea.innerHTML = `
         <div class="feedback-message correct">
           <span class="feedback-icon">✅</span>
           <div>
-            <span class="feedback-text">Correct! +${pointsOrGuess} points</span>
-            <p class="correct-answer">${question.flag} ${question.name}</p>
+            <span class="feedback-text">${t('feedback.correctPoints', { points })}</span>
+            <p class="correct-answer">${answer}</p>
           </div>
         </div>
       `;
     } else {
+      const answer = `${question.flag} ${Utils.getCountryDisplayName(question)}`;
       feedbackArea.innerHTML = `
         <div class="feedback-message wrong">
           <span class="feedback-icon">❌</span>
           <div>
-            <span class="feedback-text">Not quite!</span>
-            <p class="correct-answer">The answer was: ${question.flag} ${question.name}</p>
+            <span class="feedback-text">${t('feedback.notQuite')}</span>
+            <p class="correct-answer">${t('feedback.notQuiteAnswerWas', { answer })}</p>
           </div>
         </div>
       `;
@@ -254,9 +298,28 @@ class FactDetectiveGame extends BaseGame {
     const question = this.getCurrentQuestion();
     State.recordAnswer(false, question.id);
     
-    this.showFactFeedback(false, question, null);
+    this.showFactFeedback(false, question);
     
     setTimeout(() => this.nextQuestion(), 1500);
+  }
+
+  /**
+   * Clean up listeners
+   */
+  destroy() {
+    super.destroy();
+    const input = document.getElementById('fact-answer-input');
+    const suggestions = document.getElementById('suggestions');
+
+    if (input && this.autocompleteHandler) {
+      input.removeEventListener('input', this.autocompleteHandler);
+    }
+    if (suggestions && this.suggestionsClickHandler) {
+      suggestions.removeEventListener('click', this.suggestionsClickHandler);
+    }
+
+    this.autocompleteHandler = null;
+    this.suggestionsClickHandler = null;
   }
 }
 
@@ -271,6 +334,9 @@ suggestionStyles.textContent = `
   }
   
   .suggestion-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
     padding: var(--space-xs) var(--space-sm);
     background: rgba(99, 102, 241, 0.15);
     border: 1px solid var(--border-accent);
@@ -284,6 +350,10 @@ suggestionStyles.textContent = `
   .suggestion-btn:hover {
     background: rgba(99, 102, 241, 0.3);
     transform: translateY(-2px);
+  }
+
+  .suggestion-flag {
+    font-size: 1rem;
   }
 `;
 document.head.appendChild(suggestionStyles);

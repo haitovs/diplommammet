@@ -4,6 +4,9 @@
     "home": "Home",
     "settings": "Settings",
     "stats": "Stats",
+    "mode": "Mode",
+    "online": "Online",
+    "offline": "Offline",
     "back": "Back",
     "close": "Close",
     "cancel": "Cancel",
@@ -19,7 +22,11 @@
     "next": "Next",
     "finish": "Finish",
     "playAgain": "Play Again",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "minutesShort": "min",
+    "space": "Space",
+    "light": "Light",
+    "dark": "Dark"
   },
   "games": {
     "flagMaster": "Flag Master",
@@ -40,10 +47,16 @@
     "nameThisCountry": "Name this country!",
     "typeYourGuess": "Type your guess...",
     "guess": "Guess",
-    "revealHint": "Get Hint",
+    "revealHint": "Reveal Hint",
     "hintsLeft": "{{count}} left",
     "noHintsLeft": "No hints left",
-    "noMoreHints": "No more hints available!"
+    "noMoreHints": "No more hints available!",
+    "pleaseTypeCountry": "Please type a country name",
+    "continentHint": "Continent: {{value}}",
+    "regionHint": "Region: {{value}}",
+    "capitalHint": "Capital: {{value}}",
+    "whichCountryPrompt": "Which country?",
+    "capitalPrompt": "Capital: {{capital}}"
   },
   "results": {
     "greatJob": "Great Job!",
@@ -62,7 +75,10 @@
     "correctAnswers": "Correct Answers",
     "countriesKnown": "Countries Known",
     "achievements": "Achievements",
-    "resetStats": "Reset All Stats"
+    "resetStats": "Reset All Stats",
+    "yourStatistics": "Your Statistics",
+    "bestScoresByMode": "Best Scores by Mode",
+    "resetSuccess": "Stats reset!"
   },
   "hero": {
     "eyebrow": "Geography Learning Game",
@@ -77,18 +93,63 @@
     "easy": "Easy",
     "medium": "Medium",
     "hard": "Hard",
-    "startChallenge": "Start Challenge"
+    "startChallenge": "Start Challenge",
+    "homeTitle": "Home",
+    "switchMode": "Switch Data Mode",
+    "switchTheme": "Switch Theme",
+    "statsTitle": "Your Stats",
+    "settingsTitle": "Settings"
   },
   "feedback": {
     "correctPoints": "Correct! +{{points}} points",
-    "notQuiteAnswerWas": "Not quite! The answer was:",
+    "notQuite": "Not quite!",
+    "notQuiteAnswerWas": "The answer was: {{answer}}",
     "hintsUsed": "({{count}} hint(s) used)",
-    "noHintsNeeded": "(No hints needed!)"
+    "noHintsNeeded": "(No hints needed!)",
+    "thisIs": "This is: {{answer}}"
   },
   "modal": {
     "startGame": "Start Game",
     "chooseDifficulty": "Choose your difficulty level to begin.",
     "speedDesc": "Test all your skills in a 30-second rapid-fire challenge!",
     "confirmQuit": "Are you sure you want to quit? Your progress will be lost."
+  },
+  "settings": {
+    "soundEffects": "Sound Effects",
+    "showHints": "Show Hints",
+    "defaultDifficulty": "Default Difficulty",
+    "questionsPerRound": "Questions Per Round",
+    "questionsTemplate": "{{count}} Questions",
+    "saved": "Settings saved!"
+  },
+  "achievements": {
+    "firstGame": "First Game",
+    "correct10": "10 Correct",
+    "streak5": "5 Streak",
+    "countries25": "25 Countries",
+    "perfectRound": "Perfect Round",
+    "speedDemon": "Speed Demon",
+    "firstGameDesc": "Play your first game",
+    "correct10Desc": "Get 10 correct answers",
+    "streak5Desc": "Get a 5-answer streak",
+    "countries25Desc": "Master 25 countries",
+    "perfectRoundDesc": "Finish a perfect round",
+    "speedDemonDesc": "Dominate speed mode",
+    "achievementUnlocked": "Achievement: {{name}}!",
+    "more": "+{{count}} more"
+  },
+  "ui": {
+    "onlineModeTitle": "Online Mode - Live API Data",
+    "offlineModeTitle": "Offline Mode - Local Data Pack",
+    "switchedOnlineMode": "Switched to Online Mode",
+    "switchedOfflineMode": "Switched to Offline Mode",
+    "lightModeEnabled": "Light mode",
+    "darkModeEnabled": "Dark mode",
+    "switchToLightMode": "Switch to Light Mode",
+    "switchToDarkMode": "Switch to Dark Mode"
+  },
+  "game": {
+    "round": "Round {{current}}/{{total}}",
+    "questionCounter": "Q: {{count}}"
   }
 }

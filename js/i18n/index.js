@@ -45,6 +45,8 @@ const i18n = {
     // Apply to DOM
     this.applyTranslations();
     this.updateLanguageSelector();
+    document.documentElement.lang = this.current;
+    this.refreshDynamicUI();
     
     console.log(`🌐 i18n initialized: ${this.current}`);
   },
@@ -113,9 +115,24 @@ const i18n = {
     await this.loadLanguage(langCode);
     this.applyTranslations();
     this.updateLanguageSelector();
+    document.documentElement.lang = langCode;
+    this.refreshDynamicUI();
     
     if (typeof Toast !== 'undefined') {
       Toast.show(`${this.LANGUAGES[langCode].flag} ${this.LANGUAGES[langCode].name}`, 'info');
+    }
+  },
+
+  /**
+   * Refresh dynamic parts of UI that are not driven by data-i18n attributes
+   */
+  refreshDynamicUI() {
+    if (typeof Theme !== 'undefined' && typeof Theme.updateToggleButton === 'function') {
+      Theme.updateToggleButton();
+    }
+
+    if (typeof app !== 'undefined' && typeof app.refreshLocalization === 'function') {
+      app.refreshLocalization();
     }
   },
   
@@ -156,11 +173,36 @@ const i18n = {
     if (selector) {
       selector.innerHTML = Object.entries(this.LANGUAGES).map(([code, lang]) => `
         <button class="lang-btn ${code === this.current ? 'active' : ''}" 
-                onclick="i18n.setLanguage('${code}')">
+                onclick="i18n.setLanguage('${code}')"
+                title="${lang.name}">
           ${lang.flag}
         </button>
       `).join('');
     }
+  },
+
+  /**
+   * Deep merge helper for fallback dictionaries
+   */
+  deepMerge(base, updates) {
+    const result = { ...base };
+
+    Object.entries(updates || {}).forEach(([key, value]) => {
+      if (
+        value &&
+        typeof value === 'object' &&
+        !Array.isArray(value) &&
+        result[key] &&
+        typeof result[key] === 'object' &&
+        !Array.isArray(result[key])
+      ) {
+        result[key] = this.deepMerge(result[key], value);
+      } else {
+        result[key] = value;
+      }
+    });
+
+    return result;
   },
   
   /**
@@ -451,8 +493,234 @@ const i18n = {
         }
       }
     };
+
+    const additions = {
+      en: {
+        common: {
+          mode: "Mode",
+          online: "Online",
+          offline: "Offline",
+          minutesShort: "min",
+          space: "Space",
+          light: "Light",
+          dark: "Dark"
+        },
+        games: {
+          revealHint: "Reveal Hint",
+          pleaseTypeCountry: "Please type a country name",
+          continentHint: "Continent: {{value}}",
+          regionHint: "Region: {{value}}",
+          capitalHint: "Capital: {{value}}",
+          whichCountryPrompt: "Which country?",
+          capitalPrompt: "Capital: {{capital}}"
+        },
+        stats: {
+          yourStatistics: "Your Statistics",
+          bestScoresByMode: "Best Scores by Mode",
+          resetSuccess: "Stats reset!"
+        },
+        nav: {
+          homeTitle: "Home",
+          switchMode: "Switch Data Mode",
+          switchTheme: "Switch Theme",
+          statsTitle: "Your Stats",
+          settingsTitle: "Settings"
+        },
+        feedback: {
+          notQuite: "Not quite!",
+          notQuiteAnswerWas: "The answer was: {{answer}}",
+          thisIs: "This is: {{answer}}"
+        },
+        settings: {
+          soundEffects: "Sound Effects",
+          showHints: "Show Hints",
+          defaultDifficulty: "Default Difficulty",
+          questionsPerRound: "Questions Per Round",
+          questionsTemplate: "{{count}} Questions",
+          saved: "Settings saved!"
+        },
+        achievements: {
+          firstGame: "First Game",
+          correct10: "10 Correct",
+          streak5: "5 Streak",
+          countries25: "25 Countries",
+          perfectRound: "Perfect Round",
+          speedDemon: "Speed Demon",
+          firstGameDesc: "Play your first game",
+          correct10Desc: "Get 10 correct answers",
+          streak5Desc: "Get a 5-answer streak",
+          countries25Desc: "Master 25 countries",
+          perfectRoundDesc: "Finish a perfect round",
+          speedDemonDesc: "Dominate speed mode",
+          achievementUnlocked: "Achievement: {{name}}!",
+          more: "+{{count}} more"
+        },
+        ui: {
+          onlineModeTitle: "Online Mode - Live API Data",
+          offlineModeTitle: "Offline Mode - Local Data Pack",
+          switchedOnlineMode: "Switched to Online Mode",
+          switchedOfflineMode: "Switched to Offline Mode",
+          lightModeEnabled: "Light mode",
+          darkModeEnabled: "Dark mode",
+          switchToLightMode: "Switch to Light Mode",
+          switchToDarkMode: "Switch to Dark Mode"
+        },
+        game: {
+          round: "Round {{current}}/{{total}}",
+          questionCounter: "Q: {{count}}"
+        }
+      },
+      ru: {
+        common: {
+          mode: "Режим",
+          online: "Онлайн",
+          offline: "Оффлайн",
+          minutesShort: "мин",
+          space: "Пробел",
+          light: "Светлая",
+          dark: "Тёмная"
+        },
+        games: {
+          pleaseTypeCountry: "Введите название страны",
+          continentHint: "Континент: {{value}}",
+          regionHint: "Регион: {{value}}",
+          capitalHint: "Столица: {{value}}",
+          whichCountryPrompt: "Какая страна?",
+          capitalPrompt: "Столица: {{capital}}"
+        },
+        stats: {
+          yourStatistics: "Ваша статистика",
+          bestScoresByMode: "Лучшие результаты по режимам",
+          resetSuccess: "Статистика сброшена!"
+        },
+        nav: {
+          homeTitle: "Главная",
+          switchMode: "Переключить режим данных",
+          switchTheme: "Сменить тему",
+          statsTitle: "Ваша статистика",
+          settingsTitle: "Настройки"
+        },
+        feedback: {
+          notQuite: "Не совсем!",
+          notQuiteAnswerWas: "Правильный ответ: {{answer}}",
+          thisIs: "Это: {{answer}}"
+        },
+        settings: {
+          soundEffects: "Звуковые эффекты",
+          showHints: "Показывать подсказки",
+          defaultDifficulty: "Сложность по умолчанию",
+          questionsPerRound: "Вопросов за раунд",
+          questionsTemplate: "{{count}} вопросов",
+          saved: "Настройки сохранены!"
+        },
+        achievements: {
+          firstGame: "Первая игра",
+          correct10: "10 правильных",
+          streak5: "Серия 5",
+          countries25: "25 стран",
+          perfectRound: "Идеальный раунд",
+          speedDemon: "Скоростной демон",
+          firstGameDesc: "Сыграйте в первую игру",
+          correct10Desc: "Дайте 10 правильных ответов",
+          streak5Desc: "Сделайте серию из 5",
+          countries25Desc: "Изучите 25 стран",
+          perfectRoundDesc: "Пройдите раунд без ошибок",
+          speedDemonDesc: "Покорите скоростной режим",
+          achievementUnlocked: "Достижение: {{name}}!",
+          more: "+{{count}} ещё"
+        },
+        ui: {
+          onlineModeTitle: "Онлайн-режим — данные из API",
+          offlineModeTitle: "Оффлайн-режим — локальные данные",
+          switchedOnlineMode: "Переключено на онлайн-режим",
+          switchedOfflineMode: "Переключено на оффлайн-режим",
+          lightModeEnabled: "Светлая тема",
+          darkModeEnabled: "Тёмная тема",
+          switchToLightMode: "Переключить на светлую тему",
+          switchToDarkMode: "Переключить на тёмную тему"
+        },
+        game: {
+          round: "Раунд {{current}}/{{total}}",
+          questionCounter: "В: {{count}}"
+        }
+      },
+      tk: {
+        common: {
+          mode: "Rejim",
+          online: "Onlaýn",
+          offline: "Awtonom",
+          minutesShort: "min",
+          space: "Boşluk",
+          light: "Açyk",
+          dark: "Garaňky"
+        },
+        games: {
+          pleaseTypeCountry: "Ýurduň adyny ýazyň",
+          continentHint: "Materik: {{value}}",
+          regionHint: "Sebit: {{value}}",
+          capitalHint: "Paýtagt: {{value}}",
+          whichCountryPrompt: "Haýsy ýurt?",
+          capitalPrompt: "Paýtagt: {{capital}}"
+        },
+        stats: {
+          yourStatistics: "Siziň statistikanyňyz",
+          bestScoresByMode: "Rejimler boýunça iň gowy ballar",
+          resetSuccess: "Statistika arassalandy!"
+        },
+        nav: {
+          homeTitle: "Baş sahypa",
+          switchMode: "Maglumat rejimini çalyş",
+          switchTheme: "Temany çalyş",
+          statsTitle: "Siziň statistikanyňyz",
+          settingsTitle: "Sazlamalar"
+        },
+        feedback: {
+          notQuite: "Biraz säwlik!",
+          notQuiteAnswerWas: "Dogry jogap: {{answer}}",
+          thisIs: "Bu: {{answer}}"
+        },
+        settings: {
+          soundEffects: "Ses effektleri",
+          showHints: "Maslahatlary görkez",
+          defaultDifficulty: "Bellenen kynlyk derejesi",
+          questionsPerRound: "Aýlawdaky soraglar",
+          questionsTemplate: "{{count}} sorag",
+          saved: "Sazlamalar saklandy!"
+        },
+        achievements: {
+          firstGame: "Ilkinji oýun",
+          correct10: "10 dogry jogap",
+          streak5: "5 yzygider",
+          countries25: "25 ýurt",
+          perfectRound: "Kemsiz aýlaw",
+          speedDemon: "Tizlik ussady",
+          firstGameDesc: "Ilkinji oýnuňyzy oýnaň",
+          correct10Desc: "10 dogry jogap beriň",
+          streak5Desc: "5-lik yzygiderlik ediniň",
+          countries25Desc: "25 ýurdy özleşdiriň",
+          perfectRoundDesc: "Aýlawy säwliksiz tamamlaň",
+          speedDemonDesc: "Tizlik režiminde ussatlaşyň",
+          achievementUnlocked: "Üstünlik: {{name}}!",
+          more: "+{{count}} ýene"
+        },
+        ui: {
+          onlineModeTitle: "Onlaýn režim — göni API maglumatlary",
+          offlineModeTitle: "Awtonom režim — ýerli maglumat toplumy",
+          switchedOnlineMode: "Onlaýn režime geçildi",
+          switchedOfflineMode: "Awtonom režime geçildi",
+          lightModeEnabled: "Açyk tema",
+          darkModeEnabled: "Garaňky tema",
+          switchToLightMode: "Açyk tema geç",
+          switchToDarkMode: "Garaňky tema geç"
+        },
+        game: {
+          round: "Tapgyr {{current}}/{{total}}",
+          questionCounter: "S: {{count}}"
+        }
+      }
+    };
     
-    return translations[langCode] || translations.en;
+    return this.deepMerge(translations[langCode] || translations.en, additions[langCode] || additions.en);
   }
 };
 

@@ -4,6 +4,9 @@
     "home": "Baş sahypa",
     "settings": "Sazlamalar",
     "stats": "Statistika",
+    "mode": "Rejim",
+    "online": "Onlaýn",
+    "offline": "Awtonom",
     "back": "Yza",
     "close": "Ýap",
     "cancel": "Goýbolsun",
@@ -19,7 +22,11 @@
     "next": "Indiki",
     "finish": "Gutardy",
     "playAgain": "Täzeden oýna",
-    "loading": "Ýüklenýär..."
+    "loading": "Ýüklenýär...",
+    "minutesShort": "min",
+    "space": "Boşluk",
+    "light": "Açyk",
+    "dark": "Garaňky"
   },
   "games": {
     "flagMaster": "Baýdak ussady",
@@ -43,7 +50,13 @@
     "revealHint": "Maslahat görkez",
     "hintsLeft": "{{count}} galdy",
     "noHintsLeft": "Maslahat ýok",
-    "noMoreHints": "Başga maslahat ýok!"
+    "noMoreHints": "Başga maslahat ýok!",
+    "pleaseTypeCountry": "Ýurduň adyny ýazyň",
+    "continentHint": "Materik: {{value}}",
+    "regionHint": "Sebit: {{value}}",
+    "capitalHint": "Paýtagt: {{value}}",
+    "whichCountryPrompt": "Haýsy ýurt?",
+    "capitalPrompt": "Paýtagt: {{capital}}"
   },
   "results": {
     "greatJob": "Berekella!",
@@ -62,7 +75,10 @@
     "correctAnswers": "Dogry jogaplar",
     "countriesKnown": "Bilinýän ýurtlar",
     "achievements": "Üstünlikler",
-    "resetStats": "Statistikany arassala"
+    "resetStats": "Statistikany arassala",
+    "yourStatistics": "Siziň statistikanyňyz",
+    "bestScoresByMode": "Rejimler boýunça iň gowy ballar",
+    "resetSuccess": "Statistika arassalandy!"
   },
   "hero": {
     "eyebrow": "Geografiýa öwreniş oýny",
@@ -77,18 +93,63 @@
     "easy": "Aňsat",
     "medium": "Orta",
     "hard": "Kyn",
-    "startChallenge": "Başla"
+    "startChallenge": "Başla",
+    "homeTitle": "Baş sahypa",
+    "switchMode": "Maglumat rejimini çalyş",
+    "switchTheme": "Temany çalyş",
+    "statsTitle": "Siziň statistikanyňyz",
+    "settingsTitle": "Sazlamalar"
   },
   "feedback": {
     "correctPoints": "Dogry! +{{points}} bal",
-    "notQuiteAnswerWas": "Dogry däl! Dogry jogap:",
+    "notQuite": "Biraz säwlik!",
+    "notQuiteAnswerWas": "Dogry jogap: {{answer}}",
     "hintsUsed": "({{count}} maslahat ulanyldy)",
-    "noHintsNeeded": "(Maslahatsyz!)"
+    "noHintsNeeded": "(Maslahatsyz!)",
+    "thisIs": "Bu: {{answer}}"
   },
   "modal": {
     "startGame": "Oýny başla",
     "chooseDifficulty": "Kynlyk derejesini saýlaň.",
     "speedDesc": "30 sekuntlyk çalt synagda ähli ukyplaryňyzy barlaň!",
     "confirmQuit": "Çykmak isleýärsiňizmi? Öňegidişlik ýitiriler."
+  },
+  "settings": {
+    "soundEffects": "Ses effektleri",
+    "showHints": "Maslahatlary görkez",
+    "defaultDifficulty": "Bellenen kynlyk derejesi",
+    "questionsPerRound": "Aýlawdaky soraglar",
+    "questionsTemplate": "{{count}} sorag",
+    "saved": "Sazlamalar saklandy!"
+  },
+  "achievements": {
+    "firstGame": "Ilkinji oýun",
+    "correct10": "10 dogry jogap",
+    "streak5": "5 yzygider",
+    "countries25": "25 ýurt",
+    "perfectRound": "Kemsiz aýlaw",
+    "speedDemon": "Tizlik ussady",
+    "firstGameDesc": "Ilkinji oýnuňyzy oýnaň",
+    "correct10Desc": "10 dogry jogap beriň",
+    "streak5Desc": "5-lik yzygiderlik ediniň",
+    "countries25Desc": "25 ýurdy özleşdiriň",
+    "perfectRoundDesc": "Aýlawy säwliksiz tamamlaň",
+    "speedDemonDesc": "Tizlik režiminde ussatlaşyň",
+    "achievementUnlocked": "Üstünlik: {{name}}!",
+    "more": "+{{count}} ýene"
+  },
+  "ui": {
+    "onlineModeTitle": "Onlaýn režim — göni API maglumatlary",
+    "offlineModeTitle": "Awtonom režim — ýerli maglumat toplumy",
+    "switchedOnlineMode": "Onlaýn režime geçildi",
+    "switchedOfflineMode": "Awtonom režime geçildi",
+    "lightModeEnabled": "Açyk tema",
+    "darkModeEnabled": "Garaňky tema",
+    "switchToLightMode": "Açyk tema geç",
+    "switchToDarkMode": "Garaňky tema geç"
+  },
+  "game": {
+    "round": "Tapgyr {{current}}/{{total}}",
+    "questionCounter": "S: {{count}}"
   }
 }

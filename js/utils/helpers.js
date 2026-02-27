@@ -83,21 +83,197 @@ const Utils = {
   },
 
   /**
+   * Get active language with fallback
+   */
+  getCurrentLanguage(lang = null) {
+    const requested = typeof lang === 'string' && lang ? lang : null;
+    const active = requested || (typeof i18n !== 'undefined' ? i18n.current : 'en') || 'en';
+    return ['en', 'ru', 'tk'].includes(active) ? active : 'en';
+  },
+
+  /**
+   * Unicode-safe normalization for typed answers.
+   * Keeps letters and numbers only, strips spaces/punctuation/diacritics.
+   */
+  normalizeAnswer(text) {
+    if (text === null || text === undefined) return '';
+    return String(text)
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, '');
+  },
+
+  /**
+   * Get canonical local country record by id (if available)
+   */
+  getCanonicalCountry(country) {
+    if (!country || typeof country !== 'object') return null;
+    const id = String(country.id || '').toLowerCase();
+    if (!id || typeof COUNTRIES === 'undefined') return country;
+    return COUNTRIES.find(c => c.id === id) || country;
+  },
+
+  /**
+   * Get localized country content for the requested/active language.
+   */
+  getCountryLocalization(country, lang = null) {
+    if (!country || typeof country !== 'object') return null;
+
+    const langCode = this.getCurrentLanguage(lang);
+    if (langCode === 'en') return null;
+
+    const id = String(country.id || '').toLowerCase();
+    if (!id || typeof COUNTRY_LOCALIZATION === 'undefined') return null;
+
+    const localized = COUNTRY_LOCALIZATION[id]?.[langCode];
+    if (!localized) return null;
+
+    const required = ['name', 'capital', 'continent', 'region'];
+    const hasRequired = required.every(key => typeof localized[key] === 'string' && localized[key].trim().length > 0);
+    if (!hasRequired) return null;
+
+    return localized;
+  },
+
+  /**
+   * Localized display name with English fallback.
+   */
+  getCountryDisplayName(country, lang = null) {
+    if (!country) return '';
+    const localized = this.getCountryLocalization(country, lang);
+    if (localized?.name) return localized.name;
+    const canonical = this.getCanonicalCountry(country);
+    return canonical?.name || country.name || '';
+  },
+
+  /**
+   * Localized capital with English fallback.
+   */
+  getCountryCapital(country, lang = null) {
+    if (!country) return '';
+    const localized = this.getCountryLocalization(country, lang);
+    if (localized?.capital) return localized.capital;
+    const canonical = this.getCanonicalCountry(country);
+    return canonical?.capital || country.capital || '';
+  },
+
+  /**
+   * Localized continent with English fallback.
+   */
+  getCountryContinent(country, lang = null) {
+    if (!country) return '';
+    const localized = this.getCountryLocalization(country, lang);
+    if (localized?.continent) return localized.continent;
+    const canonical = this.getCanonicalCountry(country);
+    return canonical?.continent || country.continent || '';
+  },
+
+  /**
+   * Localized region with English fallback.
+   */
+  getCountryRegion(country, lang = null) {
+    if (!country) return '';
+    const localized = this.getCountryLocalization(country, lang);
+    if (localized?.region) return localized.region;
+    const canonical = this.getCanonicalCountry(country);
+    return canonical?.region || country.region || '';
+  },
+
+  /**
+   * Localized fact clues with English fallback.
+   */
+  getCountryFacts(country, lang = null) {
+    if (!country) return [];
+    const localized = this.getCountryLocalization(country, lang);
+    if (localized?.facts && Array.isArray(localized.facts) && localized.facts.length === 5) {
+      return localized.facts;
+    }
+
+    const canonical = this.getCanonicalCountry(country);
+    if (Array.isArray(canonical?.facts) && canonical.facts.length > 0) {
+      return canonical.facts;
+    }
+    if (Array.isArray(country.facts) && country.facts.length > 0) {
+      return country.facts;
+    }
+    return [];
+  },
+
+  /**
+   * Gather country answer aliases across EN + localized variants.
+   */
+  getCountryAnswerAliases(country) {
+    if (!country) return [];
+
+    const aliasSet = new Set();
+    const canonical = this.getCanonicalCountry(country);
+    const id = String(country.id || canonical?.id || '').toLowerCase();
+
+    const add = value => {
+      if (typeof value === 'string' && value.trim()) {
+        aliasSet.add(value.trim());
+      }
+    };
+
+    add(country.name);
+    add(canonical?.name);
+
+    if (Array.isArray(country.aliases)) {
+      country.aliases.forEach(add);
+    }
+
+    if (typeof COUNTRY_LOCALIZATION !== 'undefined' && id && COUNTRY_LOCALIZATION[id]) {
+      ['ru', 'tk'].forEach(langCode => {
+        const loc = COUNTRY_LOCALIZATION[id][langCode];
+        if (!loc) return;
+        add(loc.name);
+        if (Array.isArray(loc.aliases)) {
+          loc.aliases.forEach(add);
+        }
+      });
+    }
+
+    const extraAliasesById = {
+      us: ['USA', 'U.S.A.', 'US', 'U.S.', 'United States of America', 'America'],
+      gb: ['UK', 'U.K.', 'United Kingdom', 'Great Britain', 'Britain'],
+      ae: ['UAE', 'U.A.E.', 'Emirates', 'United Arab Emirates'],
+      kr: ['South Korea', 'Korea', 'Republic of Korea'],
+      nl: ['Holland', 'The Netherlands']
+    };
+    (extraAliasesById[id] || []).forEach(add);
+
+    return [...aliasSet];
+  },
+
+  /**
+   * Check typed answer against multilingual aliases.
+   */
+  matchesCountryAnswer(input, country) {
+    const normalizedInput = this.normalizeAnswer(input);
+    if (!normalizedInput || !country) return false;
+
+    return this.getCountryAnswerAliases(country).some(alias => {
+      return this.normalizeAnswer(alias) === normalizedInput;
+    });
+  },
+
+  /**
    * Check if string matches (case-insensitive, trimmed)
    */
   matchesAnswer(input, answer) {
-    const normalize = str => str.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
-    return normalize(input) === normalize(answer);
+    return this.normalizeAnswer(input) === this.normalizeAnswer(answer);
   },
 
   /**
    * Get similar matches for a guess
    */
   getSimilarCountries(guess, countries) {
-    const normalizedGuess = guess.toLowerCase().trim();
+    const normalizedGuess = this.normalizeAnswer(guess);
+    if (!normalizedGuess) return [];
+
     return countries.filter(c => {
-      const name = c.name.toLowerCase();
-      return name.includes(normalizedGuess) || normalizedGuess.includes(name.substring(0, 3));
+      return this.getCountryAnswerAliases(c).some(alias => this.normalizeAnswer(alias).includes(normalizedGuess));
     });
   },
 
@@ -130,13 +306,23 @@ const Utils = {
    * Get title based on score
    */
   getResultTitle(stars) {
-    const titles = {
+    if (typeof t === 'function') {
+      const titleKeys = {
+        0: 'results.keepPracticing',
+        1: 'results.goodEffort',
+        2: 'results.greatJob',
+        3: 'results.perfectScore'
+      };
+      return t(titleKeys[stars] || 'results.gameOver');
+    }
+
+    const fallbackTitles = {
       0: 'Keep Practicing!',
       1: 'Good Effort!',
       2: 'Great Job!',
       3: 'Perfect Score!'
     };
-    return titles[stars] || 'Game Over!';
+    return fallbackTitles[stars] || 'Game Over!';
   },
 
   /**
@@ -215,6 +401,7 @@ const Utils = {
    */
   renderFlag(country, size = 'medium') {
     if (!country) return '🏳️';
+    const localizedName = this.getCountryDisplayName(country);
     
     // Check if offline mode and local image likely exists (basic check by ID)
     if (this.offlineMode) {
@@ -222,7 +409,7 @@ const Utils = {
       // Fallback to CDN if load fails (handled by onerror)
       return `<img 
         src="assets/flags/${country.id}.png" 
-        alt="${country.name}" 
+        alt="${localizedName}" 
         class="flag-img" 
         onerror="this.src='https://flagcdn.com/w320/${country.id}.png'; this.onerror=null;" 
       />`;
@@ -233,7 +420,7 @@ const Utils = {
     
     // Online mode: Check if flag is a URL
     if (flag.startsWith('http')) {
-      return `<img src="${flag}" alt="${country.name || 'Flag'}" class="flag-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';" /><span class="flag-emoji" style="display:none;">${flagEmoji}</span>`;
+      return `<img src="${flag}" alt="${localizedName || 'Flag'}" class="flag-img" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block';" /><span class="flag-emoji" style="display:none;">${flagEmoji}</span>`;
     }
     
     // If flag is emoji or short string

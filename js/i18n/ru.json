@@ -4,6 +4,9 @@
     "home": "Главная",
     "settings": "Настройки",
     "stats": "Статистика",
+    "mode": "Режим",
+    "online": "Онлайн",
+    "offline": "Оффлайн",
     "back": "Назад",
     "close": "Закрыть",
     "cancel": "Отмена",
@@ -19,7 +22,11 @@
     "next": "Далее",
     "finish": "Завершить",
     "playAgain": "Играть снова",
-    "loading": "Загрузка..."
+    "loading": "Загрузка...",
+    "minutesShort": "мин",
+    "space": "Пробел",
+    "light": "Светлая",
+    "dark": "Тёмная"
   },
   "games": {
     "flagMaster": "Мастер флагов",
@@ -43,7 +50,13 @@
     "revealHint": "Показать подсказку",
     "hintsLeft": "Осталось: {{count}}",
     "noHintsLeft": "Подсказок нет",
-    "noMoreHints": "Больше подсказок нет!"
+    "noMoreHints": "Больше подсказок нет!",
+    "pleaseTypeCountry": "Введите название страны",
+    "continentHint": "Континент: {{value}}",
+    "regionHint": "Регион: {{value}}",
+    "capitalHint": "Столица: {{value}}",
+    "whichCountryPrompt": "Какая страна?",
+    "capitalPrompt": "Столица: {{capital}}"
   },
   "results": {
     "greatJob": "Отлично!",
@@ -62,7 +75,10 @@
     "correctAnswers": "Правильных ответов",
     "countriesKnown": "Стран изучено",
     "achievements": "Достижения",
-    "resetStats": "Сбросить статистику"
+    "resetStats": "Сбросить статистику",
+    "yourStatistics": "Ваша статистика",
+    "bestScoresByMode": "Лучшие результаты по режимам",
+    "resetSuccess": "Статистика сброшена!"
   },
   "hero": {
     "eyebrow": "Игра для изучения географии",
@@ -77,18 +93,63 @@
     "easy": "Легко",
     "medium": "Средне",
     "hard": "Сложно",
-    "startChallenge": "Начать"
+    "startChallenge": "Начать",
+    "homeTitle": "Главная",
+    "switchMode": "Переключить режим данных",
+    "switchTheme": "Сменить тему",
+    "statsTitle": "Ваша статистика",
+    "settingsTitle": "Настройки"
   },
   "feedback": {
     "correctPoints": "Правильно! +{{points}} очков",
-    "notQuiteAnswerWas": "Не совсем! Правильный ответ:",
+    "notQuite": "Не совсем!",
+    "notQuiteAnswerWas": "Правильный ответ: {{answer}}",
     "hintsUsed": "(использовано подсказок: {{count}})",
-    "noHintsNeeded": "(Без подсказок!)"
+    "noHintsNeeded": "(Без подсказок!)",
+    "thisIs": "Это: {{answer}}"
   },
   "modal": {
     "startGame": "Начать игру",
     "chooseDifficulty": "Выберите уровень сложности.",
     "speedDesc": "Проверьте все навыки в 30-секундном блиц-турнире!",
     "confirmQuit": "Вы уверены, что хотите выйти? Прогресс будет потерян."
+  },
+  "settings": {
+    "soundEffects": "Звуковые эффекты",
+    "showHints": "Показывать подсказки",
+    "defaultDifficulty": "Сложность по умолчанию",
+    "questionsPerRound": "Вопросов за раунд",
+    "questionsTemplate": "{{count}} вопросов",
+    "saved": "Настройки сохранены!"
+  },
+  "achievements": {
+    "firstGame": "Первая игра",
+    "correct10": "10 правильных",
+    "streak5": "Серия 5",
+    "countries25": "25 стран",
+    "perfectRound": "Идеальный раунд",
+    "speedDemon": "Скоростной демон",
+    "firstGameDesc": "Сыграйте в первую игру",
+    "correct10Desc": "Дайте 10 правильных ответов",
+    "streak5Desc": "Сделайте серию из 5",
+    "countries25Desc": "Изучите 25 стран",
+    "perfectRoundDesc": "Пройдите раунд без ошибок",
+    "speedDemonDesc": "Покорите скоростной режим",
+    "achievementUnlocked": "Достижение: {{name}}!",
+    "more": "+{{count}} ещё"
+  },
+  "ui": {
+    "onlineModeTitle": "Онлайн-режим — данные из API",
+    "offlineModeTitle": "Оффлайн-режим — локальные данные",
+    "switchedOnlineMode": "Переключено на онлайн-режим",
+    "switchedOfflineMode": "Переключено на оффлайн-режим",
+    "lightModeEnabled": "Светлая тема",
+    "darkModeEnabled": "Тёмная тема",
+    "switchToLightMode": "Переключить на светлую тему",
+    "switchToDarkMode": "Переключить на тёмную тему"
+  },
+  "game": {
+    "round": "Раунд {{current}}/{{total}}",
+    "questionCounter": "В: {{count}}"
   }
 }

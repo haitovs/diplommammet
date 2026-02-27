@@ -89,7 +89,7 @@ class SpeedGeographyGame extends BaseGame {
     if (question.questionType === 'flag') {
       questionArea.innerHTML = `
         <div class="question-prompt">
-          <p class="question-text">🏳️ Name this country!</p>
+          <p class="question-text">🏳️ ${t('games.nameThisCountry')}</p>
         </div>
         <div class="flag-display animate-scale-in" style="font-size: 6rem;">
           ${question.flag}
@@ -100,7 +100,7 @@ class SpeedGeographyGame extends BaseGame {
       const outlineSvgUrl = `https://raw.githubusercontent.com/djaiss/mapsicon/master/all/${countryCode}/vector.svg`;
       questionArea.innerHTML = `
         <div class="question-prompt">
-          <p class="question-text">🗺️ Name this country!</p>
+          <p class="question-text">🗺️ ${t('games.nameThisCountry')}</p>
         </div>
         <div class="shape-display animate-scale-in">
           <img src="${outlineSvgUrl}" alt="Country shape" 
@@ -111,10 +111,10 @@ class SpeedGeographyGame extends BaseGame {
     } else {
       questionArea.innerHTML = `
         <div class="question-prompt">
-          <p class="question-text">🏛️ Capital: ${question.capital}</p>
+          <p class="question-text">🏛️ ${t('games.capitalPrompt', { capital: Utils.getCountryCapital(question) })}</p>
         </div>
         <div class="capital-display animate-scale-in" style="font-size: 2rem;">
-          Which country?
+          ${t('games.whichCountryPrompt')}
         </div>
       `;
     }
@@ -127,13 +127,13 @@ class SpeedGeographyGame extends BaseGame {
                   data-id="${opt.id}" 
                   onclick="currentGame.handleAnswer('${opt.id}', this)">
             <span class="option-flag">${opt.flag}</span>
-            <span class="option-text">${opt.name}</span>
+            <span class="option-text">${Utils.getCountryDisplayName(opt)}</span>
             <span class="option-key">${i + 1}</span>
           </button>
         `).join('')}
       </div>
       <button class="skip-btn" onclick="currentGame.skipQuestion()" style="margin: var(--space-md) auto 0; display: block;">
-        Skip (Space)
+        ${t('common.skip')} (${t('common.space')})
       </button>
     `;
 
@@ -254,7 +254,7 @@ class SpeedGeographyGame extends BaseGame {
 
     const roundEl = document.getElementById('game-round');
     if (roundEl) {
-      roundEl.textContent = `Q: ${State.game.answers.length}`;
+      roundEl.textContent = t('game.questionCounter', { count: State.game.answers.length });
     }
   }
 

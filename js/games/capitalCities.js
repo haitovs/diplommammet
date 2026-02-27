@@ -39,7 +39,7 @@ class CapitalCitiesGame extends BaseGame {
           <p class="question-text">${questionText}</p>
         </div>
         <div class="capital-display animate-scale-in">
-          🏛️ ${question.capital}
+          🏛️ ${Utils.getCountryCapital(question)}
         </div>
       `;
 
@@ -51,7 +51,7 @@ class CapitalCitiesGame extends BaseGame {
                     data-id="${opt.id}" 
                     onclick="currentGame.handleAnswer('${opt.id}', this)">
               ${Utils.renderFlag(opt, 'small')}
-              <span class="option-text">${opt.name}</span>
+              <span class="option-text">${Utils.getCountryDisplayName(opt)}</span>
               <span class="option-key">${i + 1}</span>
             </button>
           `).join('')}
@@ -68,7 +68,7 @@ class CapitalCitiesGame extends BaseGame {
         </div>
         <div class="capital-display animate-scale-in">
           ${Utils.renderFlag(question, 'medium')}
-          <span class="country-name">${question.name}</span>
+          <span class="country-name">${Utils.getCountryDisplayName(question)}</span>
         </div>
       `;
 
@@ -79,7 +79,7 @@ class CapitalCitiesGame extends BaseGame {
             <button class="answer-option" 
                     data-id="${opt.id}" 
                     onclick="currentGame.handleAnswer('${opt.id}', this)">
-              <span class="option-text">🏛️ ${opt.capital}</span>
+              <span class="option-text">🏛️ ${Utils.getCountryCapital(opt)}</span>
               <span class="option-key">${i + 1}</span>
             </button>
           `).join('')}
@@ -99,7 +99,10 @@ class CapitalCitiesGame extends BaseGame {
       : COUNTRIES;
     
     const options = [correctCountry];
-    const others = countryData.filter(c => c.id !== correctCountry.id && c.capital !== correctCountry.capital);
+    const correctCapital = Utils.normalizeAnswer(Utils.getCountryCapital(correctCountry));
+    const others = countryData.filter(c => {
+      return c.id !== correctCountry.id && Utils.normalizeAnswer(Utils.getCountryCapital(c)) !== correctCapital;
+    });
     const shuffled = Utils.shuffle(others);
     
     for (let i = 0; i < count - 1 && i < shuffled.length; i++) {
@@ -142,21 +145,21 @@ class CapitalCitiesGame extends BaseGame {
         <div class="feedback-message correct">
           <span class="feedback-icon">✅</span>
           <div>
-            <span class="feedback-text">Correct! +${points} points</span>
+            <span class="feedback-text">${t('feedback.correctPoints', { points })}</span>
           </div>
         </div>
       `;
     } else {
       const answer = this.reverseMode 
-        ? `${question.flag} ${question.name}` 
-        : `🏛️ ${question.capital}`;
+        ? `${question.flag} ${Utils.getCountryDisplayName(question)}` 
+        : `🏛️ ${Utils.getCountryCapital(question)}`;
       
       feedbackArea.innerHTML = `
         <div class="feedback-message wrong">
           <span class="feedback-icon">❌</span>
           <div>
-            <span class="feedback-text">Not quite!</span>
-            <p class="correct-answer">The answer was: ${answer}</p>
+            <span class="feedback-text">${t('feedback.notQuite')}</span>
+            <p class="correct-answer">${t('feedback.notQuiteAnswerWas', { answer })}</p>
           </div>
         </div>
       `;

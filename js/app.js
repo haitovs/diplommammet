@@ -4,6 +4,9 @@
 
 // Global game instance
 let currentGame = null;
+if (typeof window !== 'undefined') {
+  window.currentGame = null;
+}
 
 // Countries data (loaded from API or fallback)
 let GAME_COUNTRIES = [];
@@ -12,6 +15,7 @@ const app = {
   isLoading: false,
   isOnline: false, // Default to offline
   mode: 'offline', // 'offline' or 'online'
+  lastResults: null,
 
   /**
    * Initialize the application
@@ -62,7 +66,7 @@ const app = {
     this.showLoading(false);
     
     Toast.show(
-      this.mode === 'online' ? 'Switched to Online Mode' : 'Switched to Offline Mode',
+      this.mode === 'online' ? t('ui.switchedOnlineMode') : t('ui.switchedOfflineMode'),
       this.mode === 'online' ? 'success' : 'info'
     );
   },
@@ -75,11 +79,11 @@ const app = {
     const indicator = document.getElementById('online-indicator');
     if (indicator) {
       indicator.className = `online-indicator ${this.mode === 'online' ? 'online' : 'offline'}`;
-      indicator.title = this.mode === 'online' ? 'Online Mode - Live API Data' : 'Offline Mode - Local Data Pack';
+      indicator.title = this.mode === 'online' ? t('ui.onlineModeTitle') : t('ui.offlineModeTitle');
       
       // Update text/icon inside indicator area
       const text = indicator.querySelector('.indicator-text');
-      if (text) text.textContent = this.mode === 'online' ? 'Online' : 'Offline';
+      if (text) text.textContent = this.mode === 'online' ? t('common.online') : t('common.offline');
     }
 
     // Update Game Titles/Descriptions if needed
@@ -155,6 +159,7 @@ const app = {
     if (screenId !== 'game' && currentGame) {
       currentGame.destroy();
       currentGame = null;
+      window.currentGame = null;
     }
 
     // Update stats when returning home
@@ -207,6 +212,7 @@ const app = {
 
     // Initialize the game
     currentGame.init({ difficulty });
+    window.currentGame = currentGame;
   },
 
   /**
@@ -215,10 +221,11 @@ const app = {
   exitGame() {
     if (State.game.isPlaying) {
       // Confirm exit if game in progress
-      if (confirm('Are you sure you want to quit? Your progress will be lost.')) {
+      if (confirm(t('modal.confirmQuit'))) {
         if (currentGame) {
           currentGame.destroy();
           currentGame = null;
+          window.currentGame = null;
         }
         this.navigate('home');
       }
@@ -232,11 +239,13 @@ const app = {
    */
   showResults(results) {
     this.navigate('results');
+    this.lastResults = results;
 
     // Update results UI
+    const localizedTitle = Utils.getResultTitle(results.stars);
     document.getElementById('results-header').innerHTML = `
       <div class="results-emoji">${results.emoji}</div>
-      <h2 class="results-title">${results.title}</h2>
+      <h2 class="results-title">${localizedTitle}</h2>
     `;
 
     // Stars
@@ -252,24 +261,39 @@ const app = {
     document.getElementById('result-streak').textContent = results.bestStreak;
 
     // Countries learned
-    const countriesDiv = document.querySelector('.country-flags');
-    if (countriesDiv && results.countriesLearned.length > 0) {
-      const countries = results.countriesLearned
-        .map(id => COUNTRIES.find(c => c.id === id))
-        .filter(Boolean);
-      
-      countriesDiv.innerHTML = countries.map(c => `
-        <span class="country-flag-item">${c.flag} ${c.name}</span>
-      `).join('');
-      
-      document.getElementById('countries-learned').style.display = 'block';
-    } else {
-      document.getElementById('countries-learned').style.display = 'none';
-    }
+    this.renderResultsCountries(results);
 
     // Celebration for good results
     if (results.stars >= 2) {
       Confetti.celebrate();
+    }
+  },
+
+  /**
+   * Render localized country chips in results
+   */
+  renderResultsCountries(results) {
+    const countriesDiv = document.querySelector('.country-flags');
+    if (!countriesDiv) return;
+
+    const allCountries = (typeof GAME_COUNTRIES !== 'undefined' && GAME_COUNTRIES.length > 0)
+      ? GAME_COUNTRIES
+      : (COUNTRIES || []);
+
+    if (results.countriesLearned.length > 0) {
+      const countries = results.countriesLearned
+        .map(id => (COUNTRIES || []).find(c => c.id === id) || allCountries.find(c => c.id === id))
+        .filter(Boolean);
+
+      countriesDiv.innerHTML = countries.map(c => `
+        <span class="country-flag-item">${(typeof c.flag === 'string' && c.flag.startsWith('http'))
+          ? (c.flagEmoji || Utils.getEmojiFlag(c.id))
+          : (c.flag || c.flagEmoji || Utils.getEmojiFlag(c.id))} ${Utils.getCountryDisplayName(c)}</span>
+      `).join('');
+
+      document.getElementById('countries-learned').style.display = 'block';
+    } else {
+      document.getElementById('countries-learned').style.display = 'none';
     }
   },
 
@@ -336,12 +360,12 @@ const app = {
     if (!achievementsRow) return;
 
     const achievements = [
-      { id: 'first_game', emoji: '🎮', title: 'First Game' },
-      { id: 'correct_10', emoji: '🎯', title: '10 Correct' },
-      { id: 'streak_5', emoji: '🔥', title: '5 Streak' },
-      { id: 'countries_25', emoji: '🌍', title: '25 Countries' },
-      { id: 'perfect_round', emoji: '⭐', title: 'Perfect Round' },
-      { id: 'speed_demon', emoji: '⚡', title: 'Speed Demon' }
+      { id: 'first_game', emoji: '🎮', title: t('achievements.firstGameDesc') },
+      { id: 'correct_10', emoji: '🎯', title: t('achievements.correct10Desc') },
+      { id: 'streak_5', emoji: '🔥', title: t('achievements.streak5Desc') },
+      { id: 'countries_25', emoji: '🌍', title: t('achievements.countries25Desc') },
+      { id: 'perfect_round', emoji: '⭐', title: t('achievements.perfectRoundDesc') },
+      { id: 'speed_demon', emoji: '⚡', title: t('achievements.speedDemonDesc') }
     ];
 
     achievementsRow.innerHTML = achievements.map(a => {
@@ -351,7 +375,37 @@ const app = {
           ${a.emoji}
         </div>
       `;
-    }).join('') + `<div class="achievement-more">+19 more</div>`;
+    }).join('') + `<div class="achievement-more">${t('achievements.more', { count: 19 })}</div>`;
+  },
+
+  /**
+   * Refresh dynamic localized UI after language change
+   */
+  refreshLocalization() {
+    this.updateModeUI();
+    this.updateStatsDisplay();
+    this.updateAchievementsDisplay();
+
+    if (typeof Modal !== 'undefined' && State.ui.modalOpen && typeof Modal.refreshCurrentView === 'function') {
+      Modal.refreshCurrentView();
+    }
+
+    if (State.ui.currentScreen === 'game' && currentGame) {
+      currentGame.updateUI();
+      currentGame.updateProgress();
+    }
+
+    if (State.ui.currentScreen === 'results' && this.lastResults) {
+      const localizedTitle = Utils.getResultTitle(this.lastResults.stars);
+      const header = document.getElementById('results-header');
+      if (header) {
+        header.innerHTML = `
+          <div class="results-emoji">${this.lastResults.emoji}</div>
+          <h2 class="results-title">${localizedTitle}</h2>
+        `;
+      }
+      this.renderResultsCountries(this.lastResults);
+    }
   },
 
   /**

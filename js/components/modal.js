@@ -7,6 +7,8 @@ const Modal = {
   modal: null,
   titleEl: null,
   contentEl: null,
+  currentView: null,
+  currentViewPayload: null,
 
   init() {
     this.overlay = document.getElementById('modal-overlay');
@@ -29,7 +31,7 @@ const Modal = {
     if (!this.modal) this.init();
 
     this.titleEl.textContent = title;
-    
+
     if (typeof content === 'string') {
       this.contentEl.innerHTML = content;
     } else if (content instanceof HTMLElement) {
@@ -55,152 +57,187 @@ const Modal = {
     this.overlay.classList.remove('active');
     this.modal.classList.remove('active');
     State.ui.modalOpen = false;
+    this.currentView = null;
+    this.currentViewPayload = null;
+  },
+
+  /**
+   * Re-render currently open modal in the active language
+   */
+  refreshCurrentView() {
+    if (!State.ui.modalOpen) return;
+
+    if (this.currentView === 'stats') {
+      this.showStats();
+    } else if (this.currentView === 'settings') {
+      this.showSettings();
+    } else if (this.currentView === 'gameOptions') {
+      this.showGameOptions(this.currentViewPayload?.mode || 'flags');
+    }
   },
 
   /**
    * Show stats modal
    */
   showStats() {
+    this.currentView = 'stats';
+    this.currentViewPayload = null;
+
     const stats = Storage.getStats();
+    const resetToast = t('stats.resetSuccess').replace(/'/g, "\\'");
+
     const content = `
       <div class="stats-modal-grid">
         <div class="stats-modal-item">
           <span class="stats-modal-value">${stats.gamesPlayed}</span>
-          <span class="stats-modal-label">Games Played</span>
+          <span class="stats-modal-label">${t('stats.gamesPlayed')}</span>
         </div>
         <div class="stats-modal-item">
           <span class="stats-modal-value">${stats.totalCorrect}</span>
-          <span class="stats-modal-label">Correct Answers</span>
+          <span class="stats-modal-label">${t('stats.correctAnswers')}</span>
         </div>
         <div class="stats-modal-item">
           <span class="stats-modal-value">${stats.bestStreak}</span>
-          <span class="stats-modal-label">Best Streak</span>
+          <span class="stats-modal-label">${t('results.bestStreak')}</span>
         </div>
         <div class="stats-modal-item">
           <span class="stats-modal-value">${stats.countriesLearned.length}</span>
-          <span class="stats-modal-label">Countries Learned</span>
+          <span class="stats-modal-label">${t('results.countriesLearned')}</span>
         </div>
       </div>
-      
+
       <div class="game-mode-stats">
-        <h4>Best Scores by Mode</h4>
+        <h4>${t('stats.bestScoresByMode')}</h4>
         <div class="game-mode-stat-row">
-          <span class="game-mode-name">🏳️ Flag Master</span>
+          <span class="game-mode-name">🏳️ ${t('games.flagMaster')}</span>
           <span class="game-mode-score">${stats.gameStats.flags?.bestScore || 0}</span>
         </div>
         <div class="game-mode-stat-row">
-          <span class="game-mode-name">🏛️ Capital Cities</span>
+          <span class="game-mode-name">🏛️ ${t('games.capitalCities')}</span>
           <span class="game-mode-score">${stats.gameStats.capitals?.bestScore || 0}</span>
         </div>
         <div class="game-mode-stat-row">
-          <span class="game-mode-name">🔍 Fact Detective</span>
+          <span class="game-mode-name">🗺️ ${t('games.shapeShifter')}</span>
+          <span class="game-mode-score">${stats.gameStats.shapes?.bestScore || 0}</span>
+        </div>
+        <div class="game-mode-stat-row">
+          <span class="game-mode-name">🔍 ${t('games.factDetective')}</span>
           <span class="game-mode-score">${stats.gameStats.facts?.bestScore || 0}</span>
         </div>
         <div class="game-mode-stat-row">
-          <span class="game-mode-name">⚡ Speed Geography</span>
+          <span class="game-mode-name">⚡ ${t('games.speedGeography')}</span>
           <span class="game-mode-score">${stats.gameStats.speed?.bestScore || 0}</span>
         </div>
       </div>
-      
+
       <div style="margin-top: var(--space-lg); text-align: center;">
-        <button class="btn btn-secondary" onclick="Storage.clear(); Modal.close(); Toast.success('Stats reset!'); app.updateStatsDisplay();">
-          Reset All Stats
+        <button class="btn btn-secondary" onclick="Storage.clear(); Modal.close(); Toast.success('${resetToast}'); app.updateStatsDisplay(); app.updateAchievementsDisplay();">
+          ${t('stats.resetStats')}
         </button>
       </div>
     `;
-    this.open('📊 Your Statistics', content);
+
+    this.open(`📊 ${t('stats.yourStatistics')}`, content);
   },
 
   /**
    * Show settings modal
    */
   showSettings() {
+    this.currentView = 'settings';
+    this.currentViewPayload = null;
+
     const settings = Storage.getSettings();
+    const settingsSaved = t('settings.saved').replace(/'/g, "\\'");
+
+    const questionOptions = [5, 10, 15, 20].map(count => `
+      <option value="${count}" ${settings.questionCount === count ? 'selected' : ''}>${t('settings.questionsTemplate', { count })}</option>
+    `).join('');
+
     const content = `
       <div class="settings-group">
         <div class="settings-toggle">
-          <span>🔊 Sound Effects</span>
-          <div class="toggle-switch ${settings.soundEnabled ? 'active' : ''}" 
+          <span>🔊 ${t('settings.soundEffects')}</span>
+          <div class="toggle-switch ${settings.soundEnabled ? 'active' : ''}"
                onclick="this.classList.toggle('active'); Storage.updateSettings({soundEnabled: this.classList.contains('active')})">
           </div>
         </div>
-        
+
         <div class="settings-toggle">
-          <span>💡 Show Hints</span>
-          <div class="toggle-switch ${settings.showHints ? 'active' : ''}" 
+          <span>💡 ${t('settings.showHints')}</span>
+          <div class="toggle-switch ${settings.showHints ? 'active' : ''}"
                onclick="this.classList.toggle('active'); Storage.updateSettings({showHints: this.classList.contains('active')})">
           </div>
         </div>
       </div>
-      
+
       <div class="settings-group">
-        <label class="settings-label">Default Difficulty</label>
+        <label class="settings-label">${t('settings.defaultDifficulty')}</label>
         <select class="settings-select" onchange="Storage.updateSettings({difficulty: this.value})">
-          <option value="easy" ${settings.difficulty === 'easy' ? 'selected' : ''}>Easy</option>
-          <option value="medium" ${settings.difficulty === 'medium' ? 'selected' : ''}>Medium</option>
-          <option value="hard" ${settings.difficulty === 'hard' ? 'selected' : ''}>Hard</option>
-          <option value="all" ${settings.difficulty === 'all' ? 'selected' : ''}>All Levels</option>
+          <option value="easy" ${settings.difficulty === 'easy' ? 'selected' : ''}>${t('nav.easy')}</option>
+          <option value="medium" ${settings.difficulty === 'medium' ? 'selected' : ''}>${t('nav.medium')}</option>
+          <option value="hard" ${settings.difficulty === 'hard' ? 'selected' : ''}>${t('nav.hard')}</option>
+          <option value="all" ${settings.difficulty === 'all' ? 'selected' : ''}>${t('nav.allLevels')}</option>
         </select>
       </div>
-      
+
       <div class="settings-group">
-        <label class="settings-label">Questions Per Round</label>
-        <select class="settings-select" onchange="Storage.updateSettings({questionCount: parseInt(this.value)})">
-          <option value="5" ${settings.questionCount === 5 ? 'selected' : ''}>5 Questions</option>
-          <option value="10" ${settings.questionCount === 10 ? 'selected' : ''}>10 Questions</option>
-          <option value="15" ${settings.questionCount === 15 ? 'selected' : ''}>15 Questions</option>
-          <option value="20" ${settings.questionCount === 20 ? 'selected' : ''}>20 Questions</option>
+        <label class="settings-label">${t('settings.questionsPerRound')}</label>
+        <select class="settings-select" onchange="Storage.updateSettings({questionCount: parseInt(this.value, 10)})">
+          ${questionOptions}
         </select>
       </div>
-      
+
       <div style="margin-top: var(--space-lg); text-align: center;">
-        <button class="btn btn-primary" onclick="Modal.close(); Toast.success('Settings saved!');">
-          Save Settings
+        <button class="btn btn-primary" onclick="Modal.close(); Toast.success('${settingsSaved}');">
+          ${t('common.save')}
         </button>
       </div>
     `;
-    this.open('⚙️ Settings', content);
+
+    this.open(`⚙️ ${t('common.settings')}`, content);
   },
 
   /**
    * Show game mode selection with difficulty
    */
   showGameOptions(mode) {
+    this.currentView = 'gameOptions';
+    this.currentViewPayload = { mode };
+
     const modeNames = {
-      flags: '🏳️ Flag Master',
-      capitals: '🏛️ Capital Cities',
-      shapes: '🗺️ Shape Shifter',
-      facts: '🔍 Fact Detective',
-      speed: '⚡ Speed Geography'
+      flags: `🏳️ ${t('games.flagMaster')}`,
+      capitals: `🏛️ ${t('games.capitalCities')}`,
+      shapes: `🗺️ ${t('games.shapeShifter')}`,
+      facts: `🔍 ${t('games.factDetective')}`,
+      speed: `⚡ ${t('games.speedGeography')}`
     };
 
     const settings = Storage.getSettings();
-    
+
     let content = `
       <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">
-        ${mode === 'speed' 
-          ? 'Test all your skills in a 30-second rapid-fire challenge!' 
-          : 'Choose your difficulty level to begin.'}
+        ${mode === 'speed' ? t('modal.speedDesc') : t('modal.chooseDifficulty')}
       </p>
     `;
 
     if (mode !== 'speed') {
       content += `
         <div class="difficulty-selector">
-          <button class="difficulty-btn easy ${settings.difficulty === 'easy' ? 'active' : ''}" 
+          <button class="difficulty-btn easy ${settings.difficulty === 'easy' ? 'active' : ''}"
                   onclick="document.querySelectorAll('.difficulty-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"
                   data-difficulty="easy">
-            Easy
+            ${t('nav.easy')}
           </button>
-          <button class="difficulty-btn medium ${settings.difficulty === 'medium' ? 'active' : ''}" 
+          <button class="difficulty-btn medium ${settings.difficulty === 'medium' ? 'active' : ''}"
                   onclick="document.querySelectorAll('.difficulty-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"
                   data-difficulty="medium">
-            Medium
+            ${t('nav.medium')}
           </button>
-          <button class="difficulty-btn hard ${settings.difficulty === 'hard' ? 'active' : ''}" 
+          <button class="difficulty-btn hard ${settings.difficulty === 'hard' ? 'active' : ''}"
                   onclick="document.querySelectorAll('.difficulty-btn').forEach(b=>b.classList.remove('active')); this.classList.add('active');"
                   data-difficulty="hard">
-            Hard
+            ${t('nav.hard')}
           </button>
         </div>
       `;
@@ -213,12 +250,12 @@ const Modal = {
           Modal.close();
           app.launchGame('${mode}', difficulty);
         ">
-          Start Game
+          ${t('modal.startGame')}
         </button>
       </div>
     `;
 
-    this.open(modeNames[mode] || 'Start Game', content);
+    this.open(modeNames[mode] || t('modal.startGame'), content);
   }
 };
 

@@ -141,17 +141,18 @@ class BaseGame {
         <div class="feedback-message correct">
           <span class="feedback-icon">✅</span>
           <div>
-            <span class="feedback-text">Correct! +${points} points</span>
+            <span class="feedback-text">${t('feedback.correctPoints', { points })}</span>
           </div>
         </div>
       `;
     } else {
+      const answer = `${question.flag} ${Utils.getCountryDisplayName(question)}`;
       feedbackArea.innerHTML = `
         <div class="feedback-message wrong">
           <span class="feedback-icon">❌</span>
           <div>
-            <span class="feedback-text">Not quite!</span>
-            <p class="correct-answer">The answer was: ${question.flag} ${question.name}</p>
+            <span class="feedback-text">${t('feedback.notQuite')}</span>
+            <p class="correct-answer">${t('feedback.notQuiteAnswerWas', { answer })}</p>
           </div>
         </div>
       `;
@@ -201,7 +202,10 @@ class BaseGame {
     // Update round display
     const roundEl = document.getElementById('game-round');
     if (roundEl) {
-      roundEl.textContent = `Round ${this.currentIndex + 1}/${this.questions.length}`;
+      roundEl.textContent = t('game.round', {
+        current: this.currentIndex + 1,
+        total: this.questions.length
+      });
     }
   }
 
@@ -211,11 +215,11 @@ class BaseGame {
   updateUI() {
     const modeLabel = document.getElementById('game-mode-label');
     const modeNames = {
-      flags: '🏳️ Flag Master',
-      capitals: '🏛️ Capital Cities',
-      shapes: '🗺️ Shape Shifter',
-      facts: '🔍 Fact Detective',
-      speed: '⚡ Speed Mode'
+      flags: `🏳️ ${t('games.flagMaster')}`,
+      capitals: `🏛️ ${t('games.capitalCities')}`,
+      shapes: `🗺️ ${t('games.shapeShifter')}`,
+      facts: `🔍 ${t('games.factDetective')}`,
+      speed: `⚡ ${t('games.speedGeography')}`
     };
     if (modeLabel) {
       modeLabel.textContent = modeNames[this.mode] || this.mode;
@@ -280,28 +284,28 @@ class BaseGame {
     // First game
     if (stats.gamesPlayed === 1) {
       if (Storage.unlockAchievement('first_game')) {
-        Toast.success('🎮 Achievement: First Game!');
+        Toast.success(`🎮 ${t('achievements.achievementUnlocked', { name: t('achievements.firstGame') })}`);
       }
     }
 
     // Perfect round
     if (results.correct === results.total) {
       if (Storage.unlockAchievement('perfect_round')) {
-        Toast.success('⭐ Achievement: Perfect Round!');
+        Toast.success(`⭐ ${t('achievements.achievementUnlocked', { name: t('achievements.perfectRound') })}`);
       }
     }
 
     // Streak achievements
     if (results.bestStreak >= 5) {
       if (Storage.unlockAchievement('streak_5')) {
-        Toast.success('🔥 Achievement: 5 in a row!');
+        Toast.success(`🔥 ${t('achievements.achievementUnlocked', { name: t('achievements.streak5') })}`);
       }
     }
 
     // Countries learned
     if (stats.countriesLearned.length >= 25) {
       if (Storage.unlockAchievement('countries_25')) {
-        Toast.success('🌍 Achievement: 25 Countries Mastered!');
+        Toast.success(`🌍 ${t('achievements.achievementUnlocked', { name: t('achievements.countries25') })}`);
       }
     }
   }

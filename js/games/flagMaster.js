@@ -41,7 +41,7 @@ class FlagMasterGame extends BaseGame {
                   data-id="${opt.id}" 
                   onclick="currentGame.handleAnswer('${opt.id}', this)">
             <span class="option-key">${i + 1}</span>
-            <span class="option-text">${opt.name}</span>
+            <span class="option-text">${Utils.getCountryDisplayName(opt)}</span>
           </button>
         `).join('')}
       </div>

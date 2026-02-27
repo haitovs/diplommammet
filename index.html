@@ -30,29 +30,29 @@
       <div class="header-brand" onclick="app.navigate('home')">
         <span class="logo">🌍</span>
         <span class="brand-text">GeoQuest</span>
-        <div id="online-indicator" class="online-indicator offline" title="Offline Mode - Local Data Pack" onclick="event.stopPropagation(); app.toggleMode()">
+        <div id="online-indicator" class="online-indicator offline" title="Offline Mode - Local Data Pack" data-i18n-title="ui.offlineModeTitle" onclick="event.stopPropagation(); app.toggleMode()">
           <span class="indicator-dot">●</span>
-          <span class="indicator-text">Offline</span>
+          <span class="indicator-text" data-i18n="common.offline">Offline</span>
         </div>
       </div>
       <nav class="header-nav">
-        <button class="nav-btn" onclick="app.navigate('home')" title="Home">
+        <button class="nav-btn" onclick="app.navigate('home')" title="Home" data-i18n-title="nav.homeTitle">
           <span class="nav-icon">🏠</span>
           <span class="nav-label" data-i18n="common.home">Home</span>
         </button>
-        <button class="nav-btn" onclick="app.toggleMode()" title="Switch Data Mode">
+        <button class="nav-btn" onclick="app.toggleMode()" title="Switch Data Mode" data-i18n-title="nav.switchMode">
           <span class="nav-icon">🔄</span>
-          <span class="nav-label">Mode</span>
+          <span class="nav-label" data-i18n="common.mode">Mode</span>
         </button>
-        <button id="theme-toggle" class="nav-btn" onclick="Theme.toggle()" title="Switch Theme">
+        <button id="theme-toggle" class="nav-btn" onclick="Theme.toggle()" title="Switch Theme" data-i18n-title="nav.switchTheme">
           <span class="nav-icon">☀️</span>
-          <span class="nav-label">Light</span>
+          <span class="nav-label" data-i18n="common.light">Light</span>
         </button>
-        <button class="nav-btn" onclick="app.showStats()" title="Your Stats">
+        <button class="nav-btn" onclick="app.showStats()" title="Your Stats" data-i18n-title="nav.statsTitle">
           <span class="nav-icon">📊</span>
           <span class="nav-label" data-i18n="common.stats">Stats</span>
         </button>
-        <button class="nav-btn" onclick="app.showSettings()" title="Settings">
+        <button class="nav-btn" onclick="app.showSettings()" title="Settings" data-i18n-title="nav.settingsTitle">
           <span class="nav-icon">⚙️</span>
           <span class="nav-label" data-i18n="common.settings">Settings</span>
         </button>
@@ -96,7 +96,7 @@
               <p class="game-card-desc" data-i18n="games.flagMasterDesc">Identify countries by their flags</p>
               <div class="game-card-meta">
                 <span class="difficulty-badge easy" data-i18n="nav.allLevels">All Levels</span>
-                <span class="game-time">~5 min</span>
+                <span class="game-time">~5 <span data-i18n="common.minutesShort">min</span></span>
               </div>
             </div>
             <button class="game-card-btn" data-i18n="common.play">Play</button>
@@ -110,7 +110,7 @@
               <p class="game-card-desc" data-i18n="games.capitalCitiesDesc">Match countries with their capitals</p>
               <div class="game-card-meta">
                 <span class="difficulty-badge medium" data-i18n="nav.medium">Medium</span>
-                <span class="game-time">~5 min</span>
+                <span class="game-time">~5 <span data-i18n="common.minutesShort">min</span></span>
               </div>
             </div>
             <button class="game-card-btn" data-i18n="common.play">Play</button>
@@ -124,7 +124,7 @@
               <p class="game-card-desc" data-i18n="games.shapeShifterDesc">Recognize countries by their outline</p>
               <div class="game-card-meta">
                 <span class="difficulty-badge hard" data-i18n="nav.hard">Hard</span>
-                <span class="game-time">~7 min</span>
+                <span class="game-time">~7 <span data-i18n="common.minutesShort">min</span></span>
               </div>
             </div>
             <button class="game-card-btn" data-i18n="common.play">Play</button>
@@ -138,7 +138,7 @@
               <p class="game-card-desc" data-i18n="games.factDetectiveDesc">Guess countries from clever clues</p>
               <div class="game-card-meta">
                 <span class="difficulty-badge medium" data-i18n="nav.medium">Medium</span>
-                <span class="game-time">~8 min</span>
+                <span class="game-time">~8 <span data-i18n="common.minutesShort">min</span></span>
               </div>
             </div>
             <button class="game-card-btn" data-i18n="common.play">Play</button>
@@ -184,27 +184,27 @@
         <div class="achievements-preview">
           <h3 class="achievements-title">🏆 <span data-i18n="stats.achievements">Achievements</span></h3>
           <div class="achievements-row" id="achievements-row">
-            <div class="achievement locked" title="Play your first game">🎮</div>
-            <div class="achievement locked" title="Get 10 correct answers">🎯</div>
-            <div class="achievement locked" title="5 in a row streak">🔥</div>
-            <div class="achievement locked" title="Master 25 countries">🌍</div>
-            <div class="achievement locked" title="Perfect round">⭐</div>
-            <div class="achievement locked" title="Speed demon">⚡</div>
-            <div class="achievement-more">+19 more</div>
+            <div class="achievement locked" title="Play your first game" data-i18n-title="achievements.firstGameDesc">🎮</div>
+            <div class="achievement locked" title="Get 10 correct answers" data-i18n-title="achievements.correct10Desc">🎯</div>
+            <div class="achievement locked" title="5 in a row streak" data-i18n-title="achievements.streak5Desc">🔥</div>
+            <div class="achievement locked" title="Master 25 countries" data-i18n-title="achievements.countries25Desc">🌍</div>
+            <div class="achievement locked" title="Perfect round" data-i18n-title="achievements.perfectRoundDesc">⭐</div>
+            <div class="achievement locked" title="Speed demon" data-i18n-title="achievements.speedDemonDesc">⚡</div>
+            <div class="achievement-more" data-i18n="achievements.more">+19 more</div>
           </div>
         </div>
       </section>
 
       <!-- Game Screen (dynamically populated) -->
       <section id="game-screen" class="screen">
-        <!-- Game header -->
+          <!-- Game header -->
         <div class="game-header">
           <button class="back-btn" onclick="app.exitGame()">
-            ← Back
+            ← <span data-i18n="common.back">Back</span>
           </button>
           <div class="game-info">
-            <span class="game-mode-label" id="game-mode-label">Flag Master</span>
-            <span class="game-round" id="game-round">Round 1/10</span>
+            <span class="game-mode-label" id="game-mode-label" data-i18n="games.flagMaster">Flag Master</span>
+            <span class="game-round" id="game-round">1/10</span>
           </div>
           <div class="game-timer" id="game-timer">
             <span class="timer-icon">⏱️</span>
@@ -232,16 +232,16 @@
         <div class="feedback-area" id="feedback-area"></div>
 
         <!-- Score display -->
-        <div class="score-display">
+          <div class="score-display">
           <div class="score-item">
             <span class="score-icon">💎</span>
             <span class="score-value" id="current-score">0</span>
-            <span class="score-label">Score</span>
+            <span class="score-label" data-i18n="common.score">Score</span>
           </div>
           <div class="score-item">
             <span class="score-icon">🔥</span>
             <span class="score-value" id="current-streak">0</span>
-            <span class="score-label">Streak</span>
+            <span class="score-label" data-i18n="common.streak">Streak</span>
           </div>
         </div>
       </section>
@@ -251,41 +251,41 @@
         <div class="results-container">
           <div class="results-header" id="results-header">
             <div class="results-emoji">🎉</div>
-            <h2 class="results-title">Great Job!</h2>
+            <h2 class="results-title" data-i18n="results.greatJob">Great Job!</h2>
           </div>
           
           <div class="results-score-card">
             <div class="results-stars" id="results-stars">⭐⭐⭐</div>
             <div class="results-score" id="results-score">850</div>
-            <div class="results-label">Points Earned</div>
+            <div class="results-label" data-i18n="results.pointsEarned">Points Earned</div>
           </div>
 
           <div class="results-stats">
             <div class="result-stat">
               <span class="result-stat-value" id="result-correct">8/10</span>
-              <span class="result-stat-label">Correct</span>
+              <span class="result-stat-label" data-i18n="common.correct">Correct</span>
             </div>
             <div class="result-stat">
               <span class="result-stat-value" id="result-accuracy">80%</span>
-              <span class="result-stat-label">Accuracy</span>
+              <span class="result-stat-label" data-i18n="results.accuracy">Accuracy</span>
             </div>
             <div class="result-stat">
               <span class="result-stat-value" id="result-streak">5</span>
-              <span class="result-stat-label">Best Streak</span>
+              <span class="result-stat-label" data-i18n="results.bestStreak">Best Streak</span>
             </div>
           </div>
 
           <div class="countries-learned" id="countries-learned">
-            <h4>Countries Learned:</h4>
+            <h4 data-i18n="results.countriesLearned">Countries Learned</h4>
             <div class="country-flags"></div>
           </div>
 
           <div class="results-actions">
             <button class="btn btn-primary btn-lg" onclick="app.playAgain()">
-              🔄 Play Again
+              🔄 <span data-i18n="common.playAgain">Play Again</span>
             </button>
             <button class="btn btn-secondary btn-lg" onclick="app.navigate('home')">
-              🏠 Home
+              🏠 <span data-i18n="common.home">Home</span>
             </button>
           </div>
         </div>
@@ -296,7 +296,7 @@
     <div id="modal-overlay" class="modal-overlay" onclick="app.closeModal()"></div>
     <div id="modal" class="modal">
       <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">Modal Title</h3>
+        <h3 class="modal-title" id="modal-title" data-i18n="common.loading">Loading...</h3>
         <button class="modal-close" onclick="app.closeModal()">×</button>
       </div>
       <div class="modal-content" id="modal-content"></div>
@@ -311,6 +311,7 @@
 
   <!-- Scripts -->
   <script src="js/data/countries.js"></script>
+  <script src="js/data/countryLocalization.js"></script>
   <script src="js/services/countryAPI.js"></script>
   <script src="js/utils/helpers.js"></script>
   <script src="js/utils/storage.js"></script>

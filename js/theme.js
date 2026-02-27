@@ -14,6 +14,12 @@ const Theme = {
   
   // Current theme
   current: 'dark',
+
+  tr(key, fallback) {
+    if (typeof t !== 'function') return fallback;
+    const translated = t(key);
+    return translated === key ? fallback : translated;
+  },
   
   /**
    * Initialize theme system
@@ -64,7 +70,9 @@ const Theme = {
     // Announce to user
     if (typeof Toast !== 'undefined') {
       Toast.show(
-        this.current === 'light' ? '☀️ Light mode' : '🌙 Dark mode',
+        this.current === 'light'
+          ? `☀️ ${this.tr('ui.lightModeEnabled', 'Light mode')}`
+          : `🌙 ${this.tr('ui.darkModeEnabled', 'Dark mode')}`,
         'info'
       );
     }
@@ -88,9 +96,11 @@ const Theme = {
     const btn = document.getElementById('theme-toggle');
     if (btn) {
       btn.innerHTML = this.current === 'dark' 
-        ? '<span class="nav-icon">☀️</span><span class="nav-label">Light</span>'
-        : '<span class="nav-icon">🌙</span><span class="nav-label">Dark</span>';
-      btn.title = this.current === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
+        ? `<span class="nav-icon">☀️</span><span class="nav-label">${this.tr('common.light', 'Light')}</span>`
+        : `<span class="nav-icon">🌙</span><span class="nav-label">${this.tr('common.dark', 'Dark')}</span>`;
+      btn.title = this.current === 'dark'
+        ? this.tr('ui.switchToLightMode', 'Switch to Light Mode')
+        : this.tr('ui.switchToDarkMode', 'Switch to Dark Mode');
     }
   }
 };
