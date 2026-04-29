@@ -9,6 +9,8 @@ class BaseGame {
     this.questions = [];
     this.currentIndex = 0;
     this.answered = false;
+    this.elapsedTimer = null;
+    this.elapsedSeconds = 0;
   }
 
   /**
@@ -26,6 +28,45 @@ class BaseGame {
 
     this.showQuestion();
     this.updateUI();
+    this.startElapsedTimer();
+  }
+
+  /**
+   * Start an elapsed (count-up) timer for non-speed modes
+   */
+  startElapsedTimer() {
+    this.stopElapsedTimer();
+    this.elapsedSeconds = 0;
+    this.renderElapsed();
+
+    const timerEl = document.getElementById('game-timer');
+    if (timerEl) timerEl.style.animation = '';
+
+    this.elapsedTimer = setInterval(() => {
+      this.elapsedSeconds++;
+      this.renderElapsed();
+    }, 1000);
+  }
+
+  /**
+   * Render elapsed time into the timer-value element
+   */
+  renderElapsed() {
+    const timerEl = document.querySelector('.timer-value');
+    if (!timerEl) return;
+    const mins = Math.floor(this.elapsedSeconds / 60);
+    const secs = this.elapsedSeconds % 60;
+    timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  /**
+   * Stop the elapsed timer
+   */
+  stopElapsedTimer() {
+    if (this.elapsedTimer) {
+      clearInterval(this.elapsedTimer);
+      this.elapsedTimer = null;
+    }
   }
 
   /**
@@ -252,7 +293,8 @@ class BaseGame {
    */
   endGame() {
     State.game.isPlaying = false;
-    
+    this.stopElapsedTimer();
+
     // Update persistent stats
     const results = State.getGameResults();
     const stats = Storage.getStats();
@@ -314,6 +356,7 @@ class BaseGame {
    * Clean up
    */
   destroy() {
+    this.stopElapsedTimer();
     this.questions = [];
     this.currentIndex = 0;
   }
