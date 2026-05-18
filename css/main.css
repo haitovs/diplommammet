@@ -936,6 +936,29 @@ body:not(.mode-online) .online-only-feature {
 #game-screen[data-mode] {
   background: var(--mode-bg, var(--bg-deep));
   transition: background 0.5s ease;
+  padding-top: var(--space-lg);
+  border-radius: var(--radius-xl);
+}
+
+/* Light theme: keep mode backgrounds light so the page stays white */
+[data-theme="light"] #game-screen[data-mode="flags"] {
+  --mode-bg: linear-gradient(135deg, #ffffff, #eef2ff);
+}
+
+[data-theme="light"] #game-screen[data-mode="capitals"] {
+  --mode-bg: linear-gradient(135deg, #ffffff, #fef3c7);
+}
+
+[data-theme="light"] #game-screen[data-mode="shapes"] {
+  --mode-bg: linear-gradient(135deg, #ffffff, #d1fae5);
+}
+
+[data-theme="light"] #game-screen[data-mode="facts"] {
+  --mode-bg: linear-gradient(135deg, #ffffff, #ede9fe);
+}
+
+[data-theme="light"] #game-screen[data-mode="speed"] {
+  --mode-bg: linear-gradient(135deg, #ffffff, #fee2e2);
 }
 
 #game-screen[data-mode] .game-mode-label {

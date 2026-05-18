@@ -360,23 +360,7 @@
 
 .answer-input {
   flex: 1;
-  padding: var(--space-md) var(--space-lg);
-  background: var(--bg-input);
-  border: 2px solid var(--border-default);
-  border-radius: var(--radius-lg);
-  color: var(--text-primary);
   font-size: 1.1rem;
-  transition: all var(--transition-fast);
-}
-
-.answer-input:focus {
-  outline: none;
-  border-color: var(--primary-500);
-  box-shadow: var(--glow-primary);
-}
-
-.answer-input::placeholder {
-  color: var(--text-muted);
 }
 
 .submit-btn {
@@ -813,14 +797,63 @@
   left: 27px;
 }
 
-.settings-select {
+/* ============================================
+   Unified Form Controls
+   Shared style for all text inputs and selects
+   ============================================ */
+.answer-input,
+.settings-select,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="search"],
+select {
   width: 100%;
-  padding: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
   background: var(--bg-input);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-md);
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-lg);
   color: var(--text-primary);
+  font-family: var(--font-body);
   font-size: 1rem;
+  line-height: 1.4;
+  transition: all var(--transition-fast);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.answer-input:focus,
+.settings-select:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: var(--glow-primary);
+}
+
+.answer-input::placeholder,
+input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Custom caret for selects (replaces native arrow) */
+.settings-select,
+select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+  padding-right: calc(var(--space-lg) + 1.25rem);
+  cursor: pointer;
+}
+
+.settings-select option,
+select option {
+  background: var(--bg-panel);
+  color: var(--text-primary);
 }
 
 /* ============================================
