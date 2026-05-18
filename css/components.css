@@ -807,10 +807,12 @@ input[type="text"],
 input[type="number"],
 input[type="email"],
 input[type="search"],
+input[type="password"],
+select.settings-select,
 select {
   width: 100%;
   padding: var(--space-md) var(--space-lg);
-  background: var(--bg-input);
+  background-color: var(--bg-input);
   border: 2px solid var(--border-default);
   border-radius: var(--radius-lg);
   color: var(--text-primary);
@@ -818,9 +820,10 @@ select {
   font-size: 1rem;
   line-height: 1.4;
   transition: all var(--transition-fast);
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  appearance: none !important;
+  box-shadow: none;
 }
 
 .answer-input:focus,
@@ -829,6 +832,7 @@ input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="email"]:focus,
 input[type="search"]:focus,
+input[type="password"]:focus,
 select:focus {
   outline: none;
   border-color: var(--primary-500);
@@ -841,12 +845,13 @@ input::placeholder {
 }
 
 /* Custom caret for selects (replaces native arrow) */
-.settings-select,
+select.settings-select,
 select {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%23818cf8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right var(--space-md) center;
-  padding-right: calc(var(--space-lg) + 1.25rem);
+  background-size: 12px 8px;
+  padding-right: calc(var(--space-lg) + 1.5rem);
   cursor: pointer;
 }
 

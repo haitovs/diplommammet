@@ -906,59 +906,31 @@ body:not(.mode-online) .online-only-feature {
 #game-screen[data-mode="flags"] {
   --mode-primary: #6366f1;
   --mode-accent: #818cf8;
-  --mode-bg: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.9));
 }
 
 #game-screen[data-mode="capitals"] {
   --mode-primary: #f59e0b;
   --mode-accent: #fbbf24;
-  --mode-bg: linear-gradient(135deg, rgba(69, 26, 3, 0.95), rgba(120, 53, 15, 0.9));
 }
 
 #game-screen[data-mode="shapes"] {
   --mode-primary: #10b981;
   --mode-accent: #34d399;
-  --mode-bg: linear-gradient(135deg, rgba(2, 44, 34, 0.95), rgba(6, 78, 59, 0.9));
 }
 
 #game-screen[data-mode="facts"] {
   --mode-primary: #8b5cf6;
   --mode-accent: #a78bfa;
-  --mode-bg: linear-gradient(135deg, rgba(46, 16, 101, 0.95), rgba(76, 29, 149, 0.9));
 }
 
 #game-screen[data-mode="speed"] {
   --mode-primary: #ef4444;
   --mode-accent: #f87171;
-  --mode-bg: linear-gradient(135deg, rgba(69, 10, 10, 0.95), rgba(127, 29, 29, 0.9));
 }
 
 #game-screen[data-mode] {
-  background: var(--mode-bg, var(--bg-deep));
-  transition: background 0.5s ease;
-  padding-top: var(--space-lg);
-  border-radius: var(--radius-xl);
-}
-
-/* Light theme: keep mode backgrounds light so the page stays white */
-[data-theme="light"] #game-screen[data-mode="flags"] {
-  --mode-bg: linear-gradient(135deg, #ffffff, #eef2ff);
-}
-
-[data-theme="light"] #game-screen[data-mode="capitals"] {
-  --mode-bg: linear-gradient(135deg, #ffffff, #fef3c7);
-}
-
-[data-theme="light"] #game-screen[data-mode="shapes"] {
-  --mode-bg: linear-gradient(135deg, #ffffff, #d1fae5);
-}
-
-[data-theme="light"] #game-screen[data-mode="facts"] {
-  --mode-bg: linear-gradient(135deg, #ffffff, #ede9fe);
-}
-
-[data-theme="light"] #game-screen[data-mode="speed"] {
-  --mode-bg: linear-gradient(135deg, #ffffff, #fee2e2);
+  background: transparent;
+  padding-top: var(--space-md);
 }
 
 #game-screen[data-mode] .game-mode-label {
